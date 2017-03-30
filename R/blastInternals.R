@@ -1,0 +1,168 @@
+#Internals
+
+    ########
+#### BLASTN ####
+    ########
+
+#' @name makeblastdb
+#' @title Make a Blast Database
+#' @description Takes a nucleotide fasta file and produce a blast database.
+#' @param infile A nucleotide fasta file.
+#' @param hash_index \code{logical}. See Blast+ manual.
+#' @param parse_seqids \code{logical}. See Blast+ manual.
+#' @return The path to the created database.
+#' @references  Altschul, Gish, Miller, Myers & Lipman. (1990) "Basic local
+#'  alignment search tool." \emph{J. Mol. Biol}. \strong{215}:403-410.
+#' @author Ignacio Ferres
+makeblastdb <- function(infile,
+                        hash_index=F,
+                        parse_seqids=F){
+  args <- c('-dbtype nucl')
+  if(hash_index){
+    args <- paste(args,'-hash_index')
+  }
+  if(parse_seqids){
+    args <- paste(args,'-parse_seqids')
+  }
+
+  nam <- sub('[.]\\w+$','',infile)
+  cmd<-paste('makeblastdb -in',infile,
+             args,
+             '-out',nam,
+             '-title',nam)
+  system(cmd,ignore.stdout = TRUE)
+  nam
+
+}
+
+
+#' @name blastn
+#' @title Seach with Blastn.
+#' @description Seach nucleotide sequences in a nucleotide database.
+#' @param genome The query. A nucleotide fasta file.
+#' @param db The subject. A nucleotide blast database as created by
+#' \link{makeblastdb}.
+#' @param outdir Where to put the blast output file.
+#' @param n_threads \code{integer}. The nomber of cores to use.
+#' @param eval Evalue reporting threshold.
+#' @return The path to the blastn output. The blastn output is written in the
+#' following format as specified by \code{-outfmt} option in Blast+ program:
+#'
+#' \code{-outfmt '6 qseqid sseqid pident gaps length slen evalue qseq'}.
+#' @references  Altschul, Gish, Miller, Myers & Lipman. (1990) "Basic local
+#'  alignment search tool." \emph{J. Mol. Biol}. \strong{215}:403-410.
+#' @author Ignacio Ferres
+blastn <- function(genome='',
+                   db='',
+                   outdir='.',
+                   n_threads=1L,
+                   eval=1e-6){
+
+  paste0(normalizePath(outdir),'/') -> outdir
+  dbn <- rev(strsplit(db,'/')[[1]])[1]
+  gnam <- rev(strsplit(genome,'/')[[1]])[1]
+  outfile <- paste0(outdir,sub('.f\\w+$','',gnam),'_vs_',sub('[.]\\w+$','',dbn))
+  cmd<-paste0("blastn -query ",genome,
+              " -db ",db,
+              " -evalue ",eval,
+              " -outfmt '6 qseqid sseqid pident gaps length qstart qend evalue qseq'",
+              " -out ",outfile,
+              " -num_threads ",n_threads)
+  system(cmd)
+  outfile
+
+}
+
+
+#' @name readBlastResult
+#' @title Read Blast Result
+#' @description Read blast result
+#' @param blout The path to the blastn output, written in format as specified
+#' by the Blast+ parameter \code{-outfmt '6 qseqid sseqid pident gaps length
+#' slen evalue qseq'}.
+#' @return A \code{data.frame} or a \code{try-error} message if blout is empthy.
+#' @author Ignacio Ferres
+readBlastResult <- function(blout=''){
+
+  cols<-c('qid','sid','pid','gaps','lgth','qstart','qend','evalue','qseq')
+  try(read.table(blout,header = F,col.names = cols),silent = T) -> res
+  rev(strsplit(blout,'/')[[1]])[1] -> fi
+  strsplit(fi,'_vs_')[[1]][1] -> infile
+  attr(res,'infile') <- infile
+  strsplit(fi,'_vs_')[[1]][2] -> indb
+  attr(res,'indb') <- indb
+  res
+
+}
+
+
+#' @name processBlastResult
+#' @title Process Blastn Result
+#' @description Process blastn output. Reports whether the genome
+#' contains a reported allele in pubmlst, or it has a not reported (new)
+#' allele, or if no allele where found. In case a new allele were found, a
+#' fasta file is written.
+#' @param blastRes A \code{data.frame} as returned by \link{readBlastResult}.
+#' @param pid Percentage identity reporting threshold.
+#' @param scov Query coverage reporting threshold.
+#' @param write.new \code{logical}. If new alleles found should be written in
+#' \code{dir}.
+#' @param dir The directory where to put the fasta file written in case a new
+#' allele were found. Not used if \code{write.new = FALSE}.
+#' @return The allele number id if an exact match with a reported mlst gene is
+#' found, a name arbitrarily given if a new allele is found, or \code{NA} if no
+#' alleles are found.
+#' @importFrom seqinr write.fasta
+#' @author Ignacio Ferres
+processBlastResult <- function(blastRes,
+                               pid=90,
+                               scov=0.9,
+                               write.new=TRUE,
+                               dir='.'){
+
+  paste0(normalizePath(dir),'/') -> dir
+  attr(blastRes,'indb') -> gene
+
+  if (class(blastRes)!='try-error'){
+    blastRes$scov <- (blastRes$lgth-blastRes$gaps)/(blastRes$qend-blastRes$qstart+1)
+
+    if(any(blastRes$pid==100 & blastRes$scov==1)){
+
+      hit <- as.character(blastRes$sid[which(blastRes$pid==100 & blastRes$scov==1)])
+      rev(strsplit(hit,'_')[[1]])[1] -> spl
+      allele <- as.character(spl)
+      names(allele) <- gene
+      return(allele)
+
+    }else if(any(blastRes$pid>=pid & blastRes$scov>=scov)){
+
+      allele <- 'u'
+      names(allele) <- gene
+      if (write.new){
+        blastRes$pid/blastRes$scov -> blastRes$Val
+        as.character(blastRes$qseq[which.min(abs(blastRes$Val-100))]) -> sq
+        paste0(gene,'_',attr(blastRes,'infile'))-> nsq
+        out.newAllele <- paste0(dir,nsq,'.new.fas')
+        seqinr::write.fasta(sequences = sq,names = nsq,file.out = out.newAllele)
+      }
+      return(allele)
+
+    }else{
+
+      allele <- NA
+      names(allele) <- gene
+      return(allele)
+
+    }
+
+
+  }else{
+
+    allele <- NA
+    names(allele) <- gene
+    return(allele)
+
+  }
+
+
+}

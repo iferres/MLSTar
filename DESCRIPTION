@@ -1,0 +1,18 @@
+Package: quickMLST
+Type: Package
+Title: quick Multi Locus Sequence Typing Analisys
+Version: 0.1
+Date: 2017-03-28
+Authors@R: person("Ignacio", "Ferres", email = "iferres@pasteur.edu.uy", role=c("aut","cre"))
+Maintainer: <iferres@pasteur.edu.uy>
+Imports:
+  parallel,
+  httr,
+  jsonlite, 
+  seqinr
+Depends: R (>= 3.2.3)
+Description: Access pubmlst.org data from within R and perform MLST of your genomes (in fasta format) for a given scheme of your organism of interest.
+License: What license is it under?
+LazyData: TRUE
+RoxygenNote: 6.0.1
+
