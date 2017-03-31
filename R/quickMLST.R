@@ -50,6 +50,10 @@ doMLST <- function(infiles,
                    pid=90L,
                    scov=0.9){
 
+  if (.Platform$OS.type!='unix'){
+    stop('Sorry, this package works only on unix-like platforms.')
+  }
+
   if(Sys.which('blastn')==''){
     stop('blastn binary is not in $PATH. Please install it before running this function.')
   }
