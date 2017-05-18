@@ -101,8 +101,8 @@ doMLST(infiles = genomes, # The fasta files
        n_threads = 3) -> res # Use 3 threads
 ```
 
-    ## Downloading leptospira scheme 3 MLST sequences at /home/iferres/Documentos/mlst_Lepto/leptospiraMLST// .
-    ## Downloading leptospira scheme 3 MLST profile at /home/iferres/Documentos/mlst_Lepto/leptospiraMLST// .
+    ## Downloading leptospira scheme 3 MLST sequences at /home/iferres/Documents/mlst_Lepto// .
+    ## Downloading leptospira scheme 3 MLST profile at /home/iferres/Documents/mlst_Lepto// .
     ## Making BLAST databases... DONE!
     ## Running BLASTN... DONE!
 
@@ -139,16 +139,16 @@ lapply(1:3,function(x){
 }) -> allres
 ```
 
-    ## Downloading leptospira scheme 1 MLST sequences at /home/iferres/Documentos/mlst_Lepto/leptospiraMLST// .
-    ## Downloading leptospira scheme 1 MLST profile at /home/iferres/Documentos/mlst_Lepto/leptospiraMLST// .
+    ## Downloading leptospira scheme 1 MLST sequences at /home/iferres/Documentos/mlst_Lepto// .
+    ## Downloading leptospira scheme 1 MLST profile at /home/iferres/Documentos/mlst_Lepto// .
     ## Making BLAST databases... DONE!
     ## Running BLASTN... DONE!
-    ## Downloading leptospira scheme 2 MLST sequences at /home/iferres/Documentos/mlst_Lepto/leptospiraMLST// .
-    ## Downloading leptospira scheme 2 MLST profile at /home/iferres/Documentos/mlst_Lepto/leptospiraMLST// .
+    ## Downloading leptospira scheme 2 MLST sequences at /home/iferres/Documentos/mlst_Lepto// .
+    ## Downloading leptospira scheme 2 MLST profile at /home/iferres/Documentos/mlst_Lepto// .
     ## Making BLAST databases... DONE!
     ## Running BLASTN... DONE!
-    ## Downloading leptospira scheme 3 MLST sequences at /home/iferres/Documentos/mlst_Lepto/leptospiraMLST// .
-    ## Downloading leptospira scheme 3 MLST profile at /home/iferres/Documentos/mlst_Lepto/leptospiraMLST// .
+    ## Downloading leptospira scheme 3 MLST sequences at /home/iferres/Documentos/mlst_Lepto// .
+    ## Downloading leptospira scheme 3 MLST profile at /home/iferres/Documentos/mlst_Lepto// .
     ## Making BLAST databases... DONE!
     ## Running BLASTN... DONE!
 
