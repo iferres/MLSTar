@@ -61,7 +61,7 @@ doMLST <- function(infiles,
   paste0(normalizePath(dir),'/') -> dir
 
   if(pid>100){
-    stop('pid must be a integer lesser than 100.')
+    stop('pid must be a integer smaller than 100.')
   }
 
   if(scov>1 | scov<0){
