@@ -181,3 +181,19 @@ allres
 That's it. Now we have the MLST of our genomes for the 3 available schemes.
 
 You should check the files downloaded from [PubMLST](https://pubmlst.org/) on your working directory .
+
+Installation
+------------
+
+Change directory to where you want to download the package (e.g. ~/Downloads/), and clone the repository to your machine. 
+
+```
+cd ~/Downloads/
+git clone https://github.com/iferres/quickMLST
+```
+Then, from R, install the package:
+
+```r
+install.packages(pkgs = '~/Downloads/quickMLST', type = 'source', repos = NULL)
+```
+
