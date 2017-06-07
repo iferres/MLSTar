@@ -185,7 +185,16 @@ You should check the files downloaded from [PubMLST](https://pubmlst.org/) on yo
 Installation
 ------------
 
-Change directory to where you want to download the package (e.g. ~/Downloads/), and clone the repository to your machine. 
+The easiest way to install the package is from within R, using `devtools`:
+
+```r
+library(devtools)
+install_github('iferres/quickMLST')
+```
+
+Alternatively, you can clone the repository and install it manually:
+
+Change directory to where you want to download the package (e.g. ~/Downloads/), and clone the repository to your machine:
 
 ```
 cd ~/Downloads/
@@ -196,4 +205,5 @@ Then, from R, install the package:
 ```r
 install.packages(pkgs = '~/Downloads/quickMLST', type = 'source', repos = NULL)
 ```
+
 
