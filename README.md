@@ -1,5 +1,7 @@
 This R package allows you to easily determine the Multi Locus Sequence Type (MLST) of your genomes. It also works as an interface between [PubMLST](https://pubmlst.org/) through their [RESTful API](https://pubmlst.org/rest/), so you don't have to bother downloading and collecting files: the application does it automatically.
 
+NOTE: A good internet connection is highly recommended when using this package. A delay or a malfunction may be due to problems with the pubmlst.org server. 
+
 Quick standard workflow
 -----------------------
 
