@@ -77,9 +77,9 @@ doMLST <- function(infiles,
 
 
   #Valid org?
-  if(!org%in%listPubmlst_orgs()){
-    stop(paste0(org,' is not in pubmlst database. Try listPubmlst_orgs() to see avaliables.'))
-  }
+  # if(!org%in%listPubmlst_orgs()){
+  #   stop(paste0(org,' is not in pubmlst database. Try listPubmlst_orgs() to see avaliables.'))
+  # }
 
 
   #Fasta files: If NULL, download; else, check if ok.
