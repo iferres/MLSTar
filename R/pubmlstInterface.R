@@ -5,18 +5,32 @@
 #' @name listPubmlst_orgs
 #' @title List Available Organisms in Pubmlst.org Database
 #' @description List all organisms available in pubmlst database.
+#' @param try.times \code{integer}. Try n times to connect with pubmlst.org before returning an error message.
 #' @return A list of genus.
-#' @importFrom httr GET
+#' @importFrom httr GET status_code
 #' @importFrom jsonlite fromJSON
 #' @author Ignacio Ferres
 #' @export
-listPubmlst_orgs <- function(){
-  rawToChar(httr::GET('http://rest.pubmlst.org/db')$content) -> a
-  jsonlite::fromJSON(a)$databases -> b
-  lapply(b,function(x){
-    sub('_seqdef','',sub('pubmlst_','',x$name[which(grepl('seqdef',x$name))]))
-  }) -> b
-  unlist(b)
+listPubmlst_orgs <- function(try.times=3){
+  cnt <- 0
+  status.code <- 0
+  while (cnt<try.times && status.code!=200){
+    httr::GET('http://rest.pubmlst.org/') -> g
+    httr::status_code(g) -> status.code
+    cnt <- cnt + 1
+  }
+  if (httr::status_code(g)==200){
+
+    rawToChar(g$content) -> a
+    jsonlite::fromJSON(a)$databases -> b
+    lapply(b,function(x){
+      sub('_seqdef','',sub('pubmlst_','',x$name[which(grepl('seqdef',x$name))]))
+    }) -> b
+    unlist(b)
+
+  }else{
+    stop('Something went wrong with the connection.')
+  }
 }
 
 #' @name listPubmlst_schemes
