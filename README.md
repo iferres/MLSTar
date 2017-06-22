@@ -212,3 +212,7 @@ install.packages(pkgs = '~/Downloads/quickMLST', type = 'source', repos = NULL)
 
 This package uses [BLAST+](https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=Download) as search engine, so it should be installed prior to running the functions.
 
+## Citation
+        "quickMLST package"; Ignacio Ferrés, Gregorio Iraola. 
+        https://github.com/iferres/pewit (2017, Development version).
+
