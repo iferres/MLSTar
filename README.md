@@ -4,10 +4,6 @@ This R package allows you to easily determine the Multi Locus Sequence Type (MLS
 
 NOTE: A good internet connection is highly recommended when using this package. A delay or a malfunction may be due to problems with the pubmlst.org server. 
 
-## External dependencies
-
-
-
 ## Quick standard workflow
 
 The first step in your analysis should be to check the in pubmlst.org database if your organism of interest is available. So, first load the package and then run `listPubmlst_orgs()` function, printing only the first 50 elements:
