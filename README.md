@@ -1,9 +1,14 @@
+# quickMLST
+
 This R package allows you to easily determine the Multi Locus Sequence Type (MLST) of your genomes. It also works as an interface between [PubMLST](https://pubmlst.org/) through their [RESTful API](https://pubmlst.org/rest/), so you don't have to bother downloading and collecting files: the application does it automatically.
 
 NOTE: A good internet connection is highly recommended when using this package. A delay or a malfunction may be due to problems with the pubmlst.org server. 
 
-Quick standard workflow
------------------------
+## External dependencies
+
+
+
+## Quick standard workflow
 
 The first step in your analysis should be to check the in pubmlst.org database if your organism of interest is available. So, first load the package and then run `listPubmlst_orgs()` function, printing only the first 50 elements:
 
@@ -184,8 +189,7 @@ That's it. Now we have the MLST of our genomes for the 3 available schemes.
 
 You should check the files downloaded from [PubMLST](https://pubmlst.org/) on your working directory .
 
-Installation
-------------
+## Installation
 
 The easiest way to install the package is from within R, using `devtools`:
 
@@ -208,4 +212,7 @@ Then, from R, install the package:
 install.packages(pkgs = '~/Downloads/quickMLST', type = 'source', repos = NULL)
 ```
 
+### External dependencies
+
+This package uses [BLAST+](https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=Download) as search engine, so it should be installed prior to running the functions.
 
