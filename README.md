@@ -214,5 +214,5 @@ This package uses [BLAST+](https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=Bl
 
 ## Citation
         "quickMLST package"; Ignacio Ferrés, Gregorio Iraola. 
-        https://github.com/iferres/pewit (2017, Development version).
+        https://github.com/iferres/quickMLST (2017, Development version).
 
