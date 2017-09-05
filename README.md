@@ -216,3 +216,10 @@ This package uses [BLAST+](https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=Bl
         "quickMLST package"; Ignacio Ferrés, Gregorio Iraola. 
         https://github.com/iferres/quickMLST (2017, Development version).
 
+## What's next...
+ * Concatenate the aligned mlst genes into a single fasta file suitable for phylogenetic analyses.
+ * Return a snp matrix.
+ * Predict Clonal Complexes (??).
+
+
+
