@@ -99,7 +99,7 @@ Lets determine the MLST for the scheme 3.
 doMLST(infiles = genomes, # The fasta files
        org = lst[43], # The organism, in this case is "leptospira"
        scheme = 3, # Scheme id number
-       write.new = FALSE, # Don't write fasta files for new alleles found
+       write = "none", # Don't write fasta files for alleles found
        dir = getwd(), # Put MLST allele files in this dir
        n_threads = 3) -> res # Use 3 threads
 ```
@@ -135,7 +135,7 @@ lapply(1:3,function(x){
   doMLST(infiles = genomes, # The fasta files
          org = lst[43], # The organism, in this case is "leptospira"
          scheme = x, # Scheme id number. Will iterate between 1 and 3.
-         write.new = FALSE, # Don't write fasta files for new alleles found
+         write = "none", # Don't write fasta files for new alleles found
          dir = getwd(), # Put MLST allele files in this dir
          n_threads = 3)
   
