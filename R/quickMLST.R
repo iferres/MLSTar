@@ -13,11 +13,15 @@
 #' are downloaded from \url{http://rest.pubmlst.org} to \code{dir}.
 #' @param schemeProfile The path to the profile file (.tab). If left \code{NULL}
 #' then it is downloaded from \url{http://rest.pubmlst.org} to \code{dir}.
-#' @param write.new \code{logical}. If new alleles found should be written in
-#' \code{dir}.
+#' @param write \code{character}. One of \code{"new"} (Default), \code{"all"} or
+#' \code{"none"}. The fist one writes only new alleles found (not reported in
+#' pubmlst.org), the second writes all alleles found, and "none" do not write
+#' any file.
+#' @param prefix \code{character} A prefix to the fasta files of found
+#' sequences (see \code{write}). (Default: \code{"allele_"}).
 #' @param dir An existing directory where to put the loci fasta files in case
-#' they are not provided by the user. Also sequences of new allele found will
-#' be placed here if \code{write.new = TRUE}.
+#' they are not provided by the user. Also sequences found will be placed here
+#' if \code{write} is set to ethier \code{"new"} or \code{"all"}.
 #' @param n_threads \code{integer}. The number of cores to use. Each job consist
 #' on the process for one genome. Blastn searches will use 1 core per job.
 #' @param outf Where blastn output will be written. By default, in a temp
@@ -43,7 +47,8 @@ doMLST <- function(infiles,
                    scheme=1L,
                    schemeFastas=NULL,
                    schemeProfile=NULL,
-                   write.new = TRUE,
+                   write = 'new',
+                   prefix = 'allele_',
                    dir='.',
                    n_threads=1L,
                    outf=tempdir(),
@@ -170,7 +175,8 @@ doMLST <- function(infiles,
   parallel::mclapply(infiles,function(x){
     mlst(genome = x,
          dbs = dbs,
-         write.new = write.new,
+         write = write,
+         prefix = prefix,
          dir = dir,
          n_threads = 1L,
          outf = outf,
@@ -213,8 +219,12 @@ doMLST <- function(infiles,
 #' @description Perform Multi Locus Sequence Typing.
 #' @param genome A FASTA file with the genome sequence.
 #' @param dbs Subject database files. No subfix needed.
-#' @param write.new \code{logical}. If new alleles found should be written in
-#' \code{dir}.
+#' @param write \code{character}. One of \code{"new"} (Default), \code{"all"} or
+#' \code{"none"}. The fist one writes only new alleles found (not reported in
+#' pubmlst.org), the second writes all alleles found, and "none" do not write
+#' any file.
+#' @param prefix \code{character} A prefix to the fasta files of found
+#' sequences (see \code{write}). (Default: \code{"allele_"}).
 #' @param dir Sequences of new allele found will be placed here.
 #' @param n_threads \code{integer}. The number of threads to use by BLASTN.
 #' @param outf Where the blastn output will be written.
@@ -222,11 +232,12 @@ doMLST <- function(infiles,
 #' @param scov Query coverage.
 #' @return A vector with the mlst.
 #' @importFrom parallel mclapply
+#' @importFrom utils read.csv
 #' @author Ignacio Ferres
-#' @export
 mlst <- function(genome,
                  dbs,
-                 write.new=TRUE,
+                 write='new',
+                 prefix = 'allele_',
                  dir='.',
                  n_threads=1L,
                  outf=tempdir(),
@@ -245,7 +256,8 @@ mlst <- function(genome,
                     n_threads = n_threads)
     blastRes <- readBlastResult(blout = blout)
     a <- processBlastResult(blastRes = blastRes,
-                            write.new=write.new,
+                            write=write,
+                            prefix = prefix,
                             dir = dir,
                             pid = pid,
                             scov = scov)

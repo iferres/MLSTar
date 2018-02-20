@@ -5,8 +5,8 @@
 \title{Perform MLST Analysis Over a List of Genomes}
 \usage{
 doMLST(infiles, org = "leptospira", scheme = 1L, schemeFastas = NULL,
-  schemeProfile = NULL, write.new = TRUE, dir = ".", n_threads = 1L,
-  outf = tempdir(), pid = 90L, scov = 0.9)
+  schemeProfile = NULL, write = "new", prefix = "allele_", dir = ".",
+  n_threads = 1L, outf = tempdir(), pid = 90L, scov = 0.9)
 }
 \arguments{
 \item{infiles}{A vector of genome sequences in fasta format.}
@@ -24,12 +24,17 @@ are downloaded from \url{http://rest.pubmlst.org} to \code{dir}.}
 \item{schemeProfile}{The path to the profile file (.tab). If left \code{NULL}
 then it is downloaded from \url{http://rest.pubmlst.org} to \code{dir}.}
 
-\item{write.new}{\code{logical}. If new alleles found should be written in
-\code{dir}.}
+\item{write}{\code{character}. One of \code{"new"} (Default), \code{"all"} or
+\code{"none"}. The fist one writes only new alleles found (not reported in
+pubmlst.org), the second writes all alleles found, and "none" do not write
+any file.}
+
+\item{prefix}{\code{character} A prefix to the fasta files of found
+sequences (see \code{write}). (Default: \code{"allele_"}).}
 
 \item{dir}{An existing directory where to put the loci fasta files in case
-they are not provided by the user. Also sequences of new allele found will
-be placed here if \code{write.new = TRUE}.}
+they are not provided by the user. Also sequences found will be placed here
+if \code{write} is set to ethier \code{"new"} or \code{"all"}.}
 
 \item{n_threads}{\code{integer}. The number of cores to use. Each job consist
 on the process for one genome. Blastn searches will use 1 core per job.}

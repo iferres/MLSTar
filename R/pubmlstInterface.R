@@ -75,6 +75,7 @@ listPubmlst_schemes <- function(org='leptospira'){
 #' @importFrom jsonlite fromJSON
 #' @importFrom parallel mclapply
 #' @author Ignacio Ferres
+#' @importFrom utils write.table
 #' @export
 downloadPubmlst_seq <- function(org='leptospira',
                                 scheme='',

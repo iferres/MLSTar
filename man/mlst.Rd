@@ -4,16 +4,21 @@
 \alias{mlst}
 \title{MLST}
 \usage{
-mlst(genome, dbs, write.new = TRUE, dir = ".", n_threads = 1L,
-  outf = tempdir(), pid = 90, scov = 0.9)
+mlst(genome, dbs, write = "new", prefix = "allele_", dir = ".",
+  n_threads = 1L, outf = tempdir(), pid = 90, scov = 0.9)
 }
 \arguments{
 \item{genome}{A FASTA file with the genome sequence.}
 
 \item{dbs}{Subject database files. No subfix needed.}
 
-\item{write.new}{\code{logical}. If new alleles found should be written in
-\code{dir}.}
+\item{write}{\code{character}. One of \code{"new"} (Default), \code{"all"} or
+\code{"none"}. The fist one writes only new alleles found (not reported in
+pubmlst.org), the second writes all alleles found, and "none" do not write
+any file.}
+
+\item{prefix}{\code{character} A prefix to the fasta files of found
+sequences (see \code{write}). (Default: \code{"allele_"}).}
 
 \item{dir}{Sequences of new allele found will be placed here.}
 

@@ -4,8 +4,8 @@
 \alias{processBlastResult}
 \title{Process Blastn Result}
 \usage{
-processBlastResult(blastRes, pid = 90, scov = 0.9, write.new = TRUE,
-  dir = ".")
+processBlastResult(blastRes, pid = 90, scov = 0.9, write = "new",
+  prefix = "alleles_", dir = ".")
 }
 \arguments{
 \item{blastRes}{A \code{data.frame} as returned by \link{readBlastResult}.}
@@ -14,11 +14,16 @@ processBlastResult(blastRes, pid = 90, scov = 0.9, write.new = TRUE,
 
 \item{scov}{Query coverage reporting threshold.}
 
-\item{write.new}{\code{logical}. If new alleles found should be written in
-\code{dir}.}
+\item{write}{\code{character}. One of \code{"new"} (Default), \code{"all"} or
+\code{"none"}. The fist one writes only new alleles found (not reported in
+pubmlst.org), the second writes all alleles found, and "none" do not write
+any file.}
 
-\item{dir}{The directory where to put the fasta file written in case a new
-allele were found. Not used if \code{write.new = FALSE}.}
+\item{prefix}{\code{character} A prefix to the fasta files of found
+sequences (see \code{write}). (Default: \code{"allele_"}).}
+
+\item{dir}{The directory where to put the fasta file of allele sequences
+found.}
 }
 \value{
 The allele number id if an exact match with a reported mlst gene is

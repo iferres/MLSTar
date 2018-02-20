@@ -4,7 +4,10 @@
 \alias{listPubmlst_orgs}
 \title{List Available Organisms in Pubmlst.org Database}
 \usage{
-listPubmlst_orgs()
+listPubmlst_orgs(try.times = 3)
+}
+\arguments{
+\item{try.times}{\code{integer}. Try n times to connect with pubmlst.org before returning an error message.}
 }
 \value{
 A list of genus.

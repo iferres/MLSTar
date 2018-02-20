@@ -82,10 +82,12 @@ blastn <- function(genome='',
 #' slen evalue qseq'}.
 #' @return A \code{data.frame} or a \code{try-error} message if blout is empthy.
 #' @author Ignacio Ferres
+#' @importFrom utils read.table
 readBlastResult <- function(blout=''){
 
   cols<-c('qid','sid','pid','gaps','lgth','qstart','qend','evalue','qseq')
-  try(read.table(blout,header = F,col.names = cols),silent = T) -> res
+  try(read.table(blout,header = F,col.names = cols, stringsAsFactors = FALSE),
+      silent = T) -> res
   rev(strsplit(blout,'/')[[1]])[1] -> fi
   strsplit(fi,'_vs_')[[1]][1] -> infile
   attr(res,'infile') <- infile
@@ -105,10 +107,14 @@ readBlastResult <- function(blout=''){
 #' @param blastRes A \code{data.frame} as returned by \link{readBlastResult}.
 #' @param pid Percentage identity reporting threshold.
 #' @param scov Query coverage reporting threshold.
-#' @param write.new \code{logical}. If new alleles found should be written in
-#' \code{dir}.
-#' @param dir The directory where to put the fasta file written in case a new
-#' allele were found. Not used if \code{write.new = FALSE}.
+#' @param write \code{character}. One of \code{"new"} (Default), \code{"all"} or
+#' \code{"none"}. The fist one writes only new alleles found (not reported in
+#' pubmlst.org), the second writes all alleles found, and "none" do not write
+#' any file.
+#' @param prefix \code{character} A prefix to the fasta files of found
+#' sequences (see \code{write}). (Default: \code{"allele_"}).
+#' @param dir The directory where to put the fasta file of allele sequences
+#' found.
 #' @return The allele number id if an exact match with a reported mlst gene is
 #' found, a name arbitrarily given if a new allele is found, or \code{NA} if no
 #' alleles are found.
@@ -117,33 +123,64 @@ readBlastResult <- function(blout=''){
 processBlastResult <- function(blastRes,
                                pid=90,
                                scov=0.9,
-                               write.new=TRUE,
+                               write='new',
+                               prefix = 'alleles_',
                                dir='.'){
 
-  paste0(normalizePath(dir),'/') -> dir
-  attr(blastRes,'indb') -> gene
+  write <- match.arg(write, c('none', 'new', 'all'))
+  dir <- paste0(normalizePath(dir),'/')
+  gene <- attr(blastRes,'indb')
+  out.newAllele <- paste0(dir, prefix, '.', gene, '.fasta')
+  gid <- attr(blastRes,'infile')
 
   if (class(blastRes)!='try-error'){
-    blastRes$scov <- (blastRes$lgth-blastRes$gaps)/(blastRes$qend-blastRes$qstart+1)
+    blastRes$scov <- (blastRes$lgth - blastRes$gaps) /
+      (blastRes$qend - blastRes$qstart + 1)
 
-    if(any(blastRes$pid==100 & blastRes$scov==1)){
+    if(any(blastRes$pid==100 &
+           blastRes$scov==1)){
 
-      hit <- as.character(blastRes$sid[which(blastRes$pid==100 & blastRes$scov==1)])
-      rev(strsplit(hit,'_')[[1]])[1] -> spl
+      wh <- which(blastRes$pid==100 &
+                    blastRes$scov==1)
+      hit <- blastRes$sid[wh]
+      spl <- rev(strsplit(hit,'_')[[1]])[1]
       allele <- as.character(spl)
       names(allele) <- gene
+
+      if(write=='all'){
+        sq <- blastRes$qseq[wh]
+        qid <- blastRes$qid[wh]
+        nsq <- paste0(hit, ';', gid, ';', qid)
+        write.fasta(sequences = sq,
+                    names = nsq,
+                    file.out = out.newAllele,
+                    open = 'a',
+                    as.string = TRUE)
+      }
+
       return(allele)
 
-    }else if(any(blastRes$pid>=pid & blastRes$scov>=scov)){
+    }else if(any(blastRes$pid>=pid &
+                 blastRes$scov>=scov)){
+
+      blastRes$Val <- blastRes$pid/blastRes$scov
+      wh <- which.min(abs(blastRes$Val - 100))
 
       allele <- 'u'
       names(allele) <- gene
-      if (write.new){
-        blastRes$pid/blastRes$scov -> blastRes$Val
-        as.character(blastRes$qseq[which.min(abs(blastRes$Val-100))]) -> sq
-        paste0(gene,'_',attr(blastRes,'infile'))-> nsq
-        out.newAllele <- paste0(dir,nsq,'.new.fas')
-        seqinr::write.fasta(sequences = sq,names = nsq,file.out = out.newAllele)
+
+      if (write%in%c('new', 'all')){
+
+        sq <- blastRes$qseq[wh]
+        qid <- blastRes$qid[wh]
+        hit <- paste0(gene, '_u')
+        nsq <- paste0(hit, ';', gid, ';', qid)
+        write.fasta(sequences = sq,
+                    names = nsq,
+                    file.out = out.newAllele,
+                    open = 'a',
+                    as.string = TRUE)
+
       }
       return(allele)
 
