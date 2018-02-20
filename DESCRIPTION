@@ -6,7 +6,7 @@ Date: 2017-03-28
 Authors@R: c(
     person("Ignacio", "Ferres", email = "iferres@pasteur.edu.uy", role=c("aut","cre")),
     person("Gregorio", "Iraola", email = "giraola@pasteur.edu.uy", role = "aut")
-)
+    )
 Maintainer: <iferres@pasteur.edu.uy>
 Imports:
   parallel,
