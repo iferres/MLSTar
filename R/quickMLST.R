@@ -18,7 +18,7 @@
 #' pubmlst.org), the second writes all alleles found, and "none" do not write
 #' any file.
 #' @param prefix \code{character} A prefix to the fasta files of found
-#' sequences (see \code{write}). (Default: \code{"allele_"}).
+#' sequences (see \code{write}). (Default: \code{"allele"}).
 #' @param dir An existing directory where to put the loci fasta files in case
 #' they are not provided by the user. Also sequences found will be placed here
 #' if \code{write} is set to ethier \code{"new"} or \code{"all"}.
@@ -48,7 +48,7 @@ doMLST <- function(infiles,
                    schemeFastas=NULL,
                    schemeProfile=NULL,
                    write = 'new',
-                   prefix = 'allele_',
+                   prefix = 'allele',
                    dir='.',
                    n_threads=1L,
                    outf=tempdir(),
@@ -224,7 +224,7 @@ doMLST <- function(infiles,
 #' pubmlst.org), the second writes all alleles found, and "none" do not write
 #' any file.
 #' @param prefix \code{character} A prefix to the fasta files of found
-#' sequences (see \code{write}). (Default: \code{"allele_"}).
+#' sequences (see \code{write}). (Default: \code{"allele"}).
 #' @param dir Sequences of new allele found will be placed here.
 #' @param n_threads \code{integer}. The number of threads to use by BLASTN.
 #' @param outf Where the blastn output will be written.
@@ -237,7 +237,7 @@ doMLST <- function(infiles,
 mlst <- function(genome,
                  dbs,
                  write='new',
-                 prefix = 'allele_',
+                 prefix = 'allele',
                  dir='.',
                  n_threads=1L,
                  outf=tempdir(),

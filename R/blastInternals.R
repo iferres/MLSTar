@@ -112,7 +112,7 @@ readBlastResult <- function(blout=''){
 #' pubmlst.org), the second writes all alleles found, and "none" do not write
 #' any file.
 #' @param prefix \code{character} A prefix to the fasta files of found
-#' sequences (see \code{write}). (Default: \code{"allele_"}).
+#' sequences (see \code{write}). (Default: \code{"allele"}).
 #' @param dir The directory where to put the fasta file of allele sequences
 #' found.
 #' @return The allele number id if an exact match with a reported mlst gene is
@@ -124,7 +124,7 @@ processBlastResult <- function(blastRes,
                                pid=90,
                                scov=0.9,
                                write='new',
-                               prefix = 'alleles_',
+                               prefix = 'alleles',
                                dir='.'){
 
   write <- match.arg(write, c('none', 'new', 'all'))
