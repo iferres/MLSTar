@@ -4,7 +4,7 @@
 \alias{mlst}
 \title{MLST}
 \usage{
-mlst(genome, dbs, write = "new", prefix = "allele_", dir = ".",
+mlst(genome, dbs, write = "new", prefix = "allele", dir = ".",
   n_threads = 1L, outf = tempdir(), pid = 90, scov = 0.9)
 }
 \arguments{
@@ -18,9 +18,11 @@ pubmlst.org), the second writes all alleles found, and "none" do not write
 any file.}
 
 \item{prefix}{\code{character} A prefix to the fasta files of found
-sequences (see \code{write}). (Default: \code{"allele_"}).}
+sequences (see \code{write}). (Default: \code{"allele"}).}
 
-\item{dir}{Sequences of new allele found will be placed here.}
+\item{dir}{An existing directory where to put the loci fasta files in case
+they are not provided by the user. Also sequences found will be placed here
+if \code{write} is set to ethier \code{"new"} or \code{"all"}.}
 
 \item{n_threads}{\code{integer}. The number of threads to use by BLASTN.}
 

@@ -225,7 +225,9 @@ doMLST <- function(infiles,
 #' any file.
 #' @param prefix \code{character} A prefix to the fasta files of found
 #' sequences (see \code{write}). (Default: \code{"allele"}).
-#' @param dir Sequences of new allele found will be placed here.
+#' @param dir An existing directory where to put the loci fasta files in case
+#' they are not provided by the user. Also sequences found will be placed here
+#' if \code{write} is set to ethier \code{"new"} or \code{"all"}.
 #' @param n_threads \code{integer}. The number of threads to use by BLASTN.
 #' @param outf Where the blastn output will be written.
 #' @param pid Percentage identity.

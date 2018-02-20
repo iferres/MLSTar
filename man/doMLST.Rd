@@ -5,7 +5,7 @@
 \title{Perform MLST Analysis Over a List of Genomes}
 \usage{
 doMLST(infiles, org = "leptospira", scheme = 1L, schemeFastas = NULL,
-  schemeProfile = NULL, write = "new", prefix = "allele_", dir = ".",
+  schemeProfile = NULL, write = "new", prefix = "allele", dir = ".",
   n_threads = 1L, outf = tempdir(), pid = 90L, scov = 0.9)
 }
 \arguments{
@@ -30,7 +30,7 @@ pubmlst.org), the second writes all alleles found, and "none" do not write
 any file.}
 
 \item{prefix}{\code{character} A prefix to the fasta files of found
-sequences (see \code{write}). (Default: \code{"allele_"}).}
+sequences (see \code{write}). (Default: \code{"allele"}).}
 
 \item{dir}{An existing directory where to put the loci fasta files in case
 they are not provided by the user. Also sequences found will be placed here

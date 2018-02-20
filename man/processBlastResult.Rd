@@ -5,7 +5,7 @@
 \title{Process Blastn Result}
 \usage{
 processBlastResult(blastRes, pid = 90, scov = 0.9, write = "new",
-  prefix = "alleles_", dir = ".")
+  prefix = "alleles", dir = ".")
 }
 \arguments{
 \item{blastRes}{A \code{data.frame} as returned by \link{readBlastResult}.}
@@ -20,7 +20,7 @@ pubmlst.org), the second writes all alleles found, and "none" do not write
 any file.}
 
 \item{prefix}{\code{character} A prefix to the fasta files of found
-sequences (see \code{write}). (Default: \code{"allele_"}).}
+sequences (see \code{write}). (Default: \code{"allele"}).}
 
 \item{dir}{The directory where to put the fasta file of allele sequences
 found.}
