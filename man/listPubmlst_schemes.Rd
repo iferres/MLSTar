@@ -16,6 +16,12 @@ A \code{list} with genes for each available mlst scheme.
 Takes a single genus as returned by \link{listPubmlst_orgs},
 and lists the available mlst schemes for that genus in pubmlst.org .
 }
+\references{
+Jolley KA, Bray JE, Maiden MCJ. A RESTful application programming
+interface for the PubMLST molecular typing and genome databases. Database:
+The Journal of Biological Databases and Curation. 2017;2017:bax060.
+doi:10.1093/database/bax060.
+}
 \author{
 Ignacio Ferres
 }

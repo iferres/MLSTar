@@ -40,6 +40,13 @@
 #' the reported alleles in pubmlst.org . The last column ($ST) indicates the ST
 #' determined by the sequence of alleles, if available.
 #' @author Ignacio Ferres
+#' @references  Altschul, Gish, Miller, Myers & Lipman. (1990) "Basic local
+#' alignment search tool." \emph{J. Mol. Biol}. \strong{215}:403-410.
+#'
+#' Jolley KA, Bray JE, Maiden MCJ. A RESTful application programming interface
+#' for the PubMLST molecular typing and genome databases. Database: The Journal
+#' of Biological Databases and Curation. 2017;2017:bax060.
+#' doi:10.1093/database/bax060.
 #' @importFrom parallel mclapply
 #' @export
 doMLST <- function(infiles,
@@ -233,9 +240,16 @@ doMLST <- function(infiles,
 #' @param pid Percentage identity.
 #' @param scov Query coverage.
 #' @return A vector with the mlst.
+#' @author Ignacio Ferres
+#' @references  Altschul, Gish, Miller, Myers & Lipman. (1990) "Basic local
+#' alignment search tool." \emph{J. Mol. Biol}. \strong{215}:403-410.
+#'
+#' Jolley KA, Bray JE, Maiden MCJ. A RESTful application programming interface
+#' for the PubMLST molecular typing and genome databases. Database: The Journal
+#' of Biological Databases and Curation. 2017;2017:bax060.
+#' doi:10.1093/database/bax060.
 #' @importFrom parallel mclapply
 #' @importFrom utils read.csv
-#' @author Ignacio Ferres
 mlst <- function(genome,
                  dbs,
                  write='new',

@@ -26,6 +26,12 @@ and a mlst scheme as either an \code{integer} or as a vector of locus names
 as returned by \link{listPubmlst_schemes}, and downloads the fasta files for
 the given genus and mlst scheme.
 }
+\references{
+Jolley KA, Bray JE, Maiden MCJ. A RESTful application programming
+interface for the PubMLST molecular typing and genome databases. Database:
+The Journal of Biological Databases and Curation. 2017;2017:bax060.
+doi:10.1093/database/bax060.
+}
 \author{
 Ignacio Ferres
 }

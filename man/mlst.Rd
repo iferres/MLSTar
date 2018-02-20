@@ -38,6 +38,15 @@ A vector with the mlst.
 \description{
 Perform Multi Locus Sequence Typing.
 }
+\references{
+Altschul, Gish, Miller, Myers & Lipman. (1990) "Basic local
+alignment search tool." \emph{J. Mol. Biol}. \strong{215}:403-410.
+
+Jolley KA, Bray JE, Maiden MCJ. A RESTful application programming interface
+for the PubMLST molecular typing and genome databases. Database: The Journal
+of Biological Databases and Curation. 2017;2017:bax060.
+doi:10.1093/database/bax060.
+}
 \author{
 Ignacio Ferres
 }

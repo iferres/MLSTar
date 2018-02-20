@@ -21,6 +21,12 @@ This function takes a genus, as returned by \link{listPubmlst_orgs},
 and a mlst scheme as an \code{integer} and downloads the profile file for
 the given genus and mlst scheme, in tsv format.
 }
+\references{
+Jolley KA, Bray JE, Maiden MCJ. A RESTful application programming
+interface for the PubMLST molecular typing and genome databases. Database:
+The Journal of Biological Databases and Curation. 2017;2017:bax060.
+doi:10.1093/database/bax060.
+}
 \author{
 Ignacio Ferres
 }

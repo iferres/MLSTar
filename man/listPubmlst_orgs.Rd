@@ -15,6 +15,12 @@ A list of genus.
 \description{
 List all organisms available in pubmlst database.
 }
+\references{
+Jolley KA, Bray JE, Maiden MCJ. A RESTful application programming
+interface for the PubMLST molecular typing and genome databases. Database:
+The Journal of Biological Databases and Curation. 2017;2017:bax060.
+doi:10.1093/database/bax060.
+}
 \author{
 Ignacio Ferres
 }

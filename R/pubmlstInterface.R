@@ -10,6 +10,10 @@
 #' @importFrom httr GET status_code
 #' @importFrom jsonlite fromJSON
 #' @author Ignacio Ferres
+#' @references Jolley KA, Bray JE, Maiden MCJ. A RESTful application programming
+#' interface for the PubMLST molecular typing and genome databases. Database:
+#' The Journal of Biological Databases and Curation. 2017;2017:bax060.
+#' doi:10.1093/database/bax060.
 #' @export
 listPubmlst_orgs <- function(try.times=3){
   cnt <- 0
@@ -42,6 +46,10 @@ listPubmlst_orgs <- function(try.times=3){
 #' @importFrom httr GET
 #' @importFrom jsonlite fromJSON
 #' @author Ignacio Ferres
+#' @references Jolley KA, Bray JE, Maiden MCJ. A RESTful application programming
+#' interface for the PubMLST molecular typing and genome databases. Database:
+#' The Journal of Biological Databases and Curation. 2017;2017:bax060.
+#' doi:10.1093/database/bax060.
 #' @export
 listPubmlst_schemes <- function(org='leptospira'){
   paste0('http://rest.pubmlst.org/db/pubmlst_',org,'_seqdef/schemes') -> d
@@ -75,6 +83,10 @@ listPubmlst_schemes <- function(org='leptospira'){
 #' @importFrom jsonlite fromJSON
 #' @importFrom parallel mclapply
 #' @author Ignacio Ferres
+#' @references Jolley KA, Bray JE, Maiden MCJ. A RESTful application programming
+#' interface for the PubMLST molecular typing and genome databases. Database:
+#' The Journal of Biological Databases and Curation. 2017;2017:bax060.
+#' doi:10.1093/database/bax060.
 #' @importFrom utils write.table
 #' @export
 downloadPubmlst_seq <- function(org='leptospira',
@@ -122,6 +134,10 @@ downloadPubmlst_seq <- function(org='leptospira',
 #' @importFrom httr GET
 #' @importFrom jsonlite fromJSON
 #' @author Ignacio Ferres
+#' @references Jolley KA, Bray JE, Maiden MCJ. A RESTful application programming
+#' interface for the PubMLST molecular typing and genome databases. Database:
+#' The Journal of Biological Databases and Curation. 2017;2017:bax060.
+#' doi:10.1093/database/bax060.
 #' @export
 downloadPubmlst_profile <- function(org='leptospira',
                                     scheme=1L,
