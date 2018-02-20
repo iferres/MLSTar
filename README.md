@@ -121,7 +121,7 @@ res
 
 As you can see, a `data.frame` is returned. Each row is a genome, and each column is a scheme locus. The number refers to the allele number id.
 
-A `"u"` means that a new allele was found, e.g. `res$lip32_3[1]`: this allele is not yet reported in the pubmlst database. If option `write.new` is set to `TRUE`, then a fasta file is written in `dir` with this new allele.
+A `"u"` means that a new allele was found, e.g. `res$lip32_3[1]`: this allele is not yet reported in the pubmlst database. If option `write` is set to `"new"`, then a fasta file is written in `dir` with this new allele. If this option is set to `"all"`, all alleles are written (both reported and not reported in pubmlst.org).
 
 A `<NA>` means that no allele was found, i.e. no blastn local alignment pass the inclusion threshold (by default, this threshold are a percentage identity grater or equal to 90, and a subject coverage greater or equal to 0.9). In this example this was no the case for any of the screened genomes.
 
@@ -142,16 +142,16 @@ allres <- lapply(1:3,function(x){
 })
 ```
 
-    ## Downloading leptospira scheme 1 MLST sequences at /home/iferres/Documentos/mlst_Lepto// .
-    ## Downloading leptospira scheme 1 MLST profile at /home/iferres/Documentos/mlst_Lepto// .
+    ## Downloading leptospira scheme 1 MLST sequences at /home/iferres/Documents/mlst_Lepto// .
+    ## Downloading leptospira scheme 1 MLST profile at /home/iferres/Documents/mlst_Lepto// .
     ## Making BLAST databases... DONE!
     ## Running BLASTN... DONE!
-    ## Downloading leptospira scheme 2 MLST sequences at /home/iferres/Documentos/mlst_Lepto// .
-    ## Downloading leptospira scheme 2 MLST profile at /home/iferres/Documentos/mlst_Lepto// .
+    ## Downloading leptospira scheme 2 MLST sequences at /home/iferres/Documents/mlst_Lepto// .
+    ## Downloading leptospira scheme 2 MLST profile at /home/iferres/Documents/mlst_Lepto// .
     ## Making BLAST databases... DONE!
     ## Running BLASTN... DONE!
-    ## Downloading leptospira scheme 3 MLST sequences at /home/iferres/Documentos/mlst_Lepto// .
-    ## Downloading leptospira scheme 3 MLST profile at /home/iferres/Documentos/mlst_Lepto// .
+    ## Downloading leptospira scheme 3 MLST sequences at /home/iferres/Documents/mlst_Lepto// .
+    ## Downloading leptospira scheme 3 MLST profile at /home/iferres/Documents/mlst_Lepto// .
     ## Making BLAST databases... DONE!
     ## Running BLASTN... DONE!
 
