@@ -42,7 +42,7 @@ listPubmlst_orgs()[1:50]
 Lets say we are interested in Leptospira genus, which is in the place 43 in the list above. So:
 
 ``` r
-listPubmlst_orgs() -> lst
+lst <- listPubmlst_orgs() 
 lst[43]
 ```
 
@@ -82,8 +82,8 @@ Let see an example with toy data attached on this package:
 
 ``` r
 #First we list the atteched tar.gz file
-system.file('extdata', 'toyExample.tar.gz', package = 'quickMLST') -> tgz
-untar(tarfile = tgz, exdir = getwd(), list = T) -> genomes
+tgz <- system.file('extdata', 'toyExample.tar.gz', package = 'quickMLST')
+genomes <- untar(tarfile = tgz, exdir = getwd(), list = T)
 #Decompress them
 untar(tarfile = tgz,exdir = getwd())
 genomes
@@ -96,12 +96,12 @@ In this example we have 3 pathogenic leptospira genomes, in fasta format.
 Lets determine the MLST for the scheme 3.
 
 ``` r
-doMLST(infiles = genomes, # The fasta files
-       org = lst[43], # The organism, in this case is "leptospira"
-       scheme = 3, # Scheme id number
-       write = "none", # Don't write fasta files for alleles found
-       dir = getwd(), # Put MLST allele files in this dir
-       n_threads = 3) -> res # Use 3 threads
+res <- doMLST(infiles = genomes, # The fasta files
+              org = lst[43], # The organism, in this case is "leptospira"
+              scheme = 3, # Scheme id number
+              write = "none", # Don't write fasta files for alleles found  
+              dir = getwd(), # Put MLST allele files in this dir
+              n_threads = 3) -> res # Use 3 threads
 ```
 
     ## Downloading leptospira scheme 3 MLST sequences at /home/iferres/Documents/mlst_Lepto// .
@@ -130,16 +130,16 @@ The last column refers to the Sequence Type (ST). If possible, the function iden
 An easy way of obtaining the composition of the 3 mlst schemes available for this organism would be:
 
 ``` r
-lapply(1:3,function(x){
+allres <- lapply(1:3,function(x){
+            
+                 doMLST(infiles = genomes, # The fasta files
+                 org = lst[43], # The organism, in this case is "leptospira"
+                 scheme = x, # Scheme id number. Will iterate between 1 and 3.
+                 write = "none", # Don't write fasta files for alleles found
+                 dir = getwd(), # Put MLST allele files in this dir
+                 n_threads = 3)
   
-  doMLST(infiles = genomes, # The fasta files
-         org = lst[43], # The organism, in this case is "leptospira"
-         scheme = x, # Scheme id number. Will iterate between 1 and 3.
-         write = "none", # Don't write fasta files for new alleles found
-         dir = getwd(), # Put MLST allele files in this dir
-         n_threads = 3)
-  
-}) -> allres
+})
 ```
 
     ## Downloading leptospira scheme 1 MLST sequences at /home/iferres/Documentos/mlst_Lepto// .
