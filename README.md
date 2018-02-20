@@ -101,7 +101,7 @@ res <- doMLST(infiles = genomes, # The fasta files
               scheme = 3, # Scheme id number
               write = "none", # Don't write fasta files for alleles found  
               dir = getwd(), # Put MLST allele files in this dir
-              n_threads = 3) -> res # Use 3 threads
+              n_threads = 3)# Use 3 threads
 ```
 
     ## Downloading leptospira scheme 3 MLST sequences at /home/iferres/Documents/mlst_Lepto// .
