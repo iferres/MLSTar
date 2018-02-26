@@ -70,7 +70,12 @@ doMLST <- function(infiles,
     stop('blastn binary is not in $PATH. Please install it before running this function.')
   }
 
-  paste0(normalizePath(dir),'/') -> dir
+  if(!dir.exists(dir)){
+    dir.create(dir)
+    dir <- paste0(normalizePath(dir),'/')
+  }else{
+    dir <- paste0(normalizePath(dir),'/')
+  }
 
   if(pid>100){
     stop('pid must be a integer smaller than 100.')
@@ -176,24 +181,38 @@ doMLST <- function(infiles,
   cat(' DONE!\n')
 
 
+  #Create tmp dir to put new alleles
+  dnw <- paste0(dir, 'tmp/')
+  if(!dir.exists(dnw)){
+    dir.create(dnw)
+  }else{
+    unlink(dnw, recursive = TRUE)
+    dir.create(dnw)
+  }
+
   #Determine mlst for each genome
   normalizePath(infiles) -> infiles
   cat('Running BLASTN...')
-  parallel::mclapply(infiles,function(x){
+  resu <- parallel::mclapply(infiles,function(x){
     mlst(genome = x,
          dbs = dbs,
          write = write,
          prefix = prefix,
          dir = dir,
+         dnw = dnw,
          n_threads = 1L,
          outf = outf,
          pid = pid,
          scov = scov)
-  }, mc.preschedule = T,mc.cores = n_threads) -> ress
+  }, mc.preschedule = T,mc.cores = n_threads)
   cat(' DONE!\n')
-  do.call(rbind,ress) -> resu
-  rownames(resu) <- sub('.fas$','',sapply(infiles,function(x){rev(strsplit(x,'/')[[1]])[1]}))
-  as.data.frame(resu) -> resu
+  resu <- do.call(rbind,resu)
+  rownames(resu) <- basename(infiles)
+  resu <- as.data.frame(resu)
+
+  #Check if 'u'nknowns are not the same, and name accordingly.
+
+
 
   #Detect ST
   apply(resu,1,function(x){
@@ -235,6 +254,8 @@ doMLST <- function(infiles,
 #' @param dir An existing directory where to put the loci fasta files in case
 #' they are not provided by the user. Also sequences found will be placed here
 #' if \code{write} is set to ethier \code{"new"} or \code{"all"}.
+#' @param dnw Temporary directory where to put new alleles to check later if
+#' are the same.
 #' @param n_threads \code{integer}. The number of threads to use by BLASTN.
 #' @param outf Where the blastn output will be written.
 #' @param pid Percentage identity.
@@ -255,6 +276,7 @@ mlst <- function(genome,
                  write='new',
                  prefix = 'allele',
                  dir='.',
+                 dnw = paste0(dir, 'tmp/'),
                  n_threads=1L,
                  outf=tempdir(),
                  pid=90,
@@ -275,6 +297,7 @@ mlst <- function(genome,
                             write=write,
                             prefix = prefix,
                             dir = dir,
+                            dnw = dnw,
                             pid = pid,
                             scov = scov)
     res[i] <- as.character(a)
