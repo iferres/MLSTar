@@ -207,12 +207,57 @@ doMLST <- function(infiles,
   }, mc.preschedule = T,mc.cores = n_threads)
   cat(' DONE!\n')
   resu <- do.call(rbind,resu)
-  rownames(resu) <- basename(infiles)
-  resu <- as.data.frame(resu)
+  rownames(resu) <- sub('[.]\\w+$','',basename(infiles))
+  resu <- as.data.frame(resu, stringsAsFactors = FALSE)
 
   #Check if 'u'nknowns are not the same, and name accordingly.
+  us <- which(apply(resu, 2,function(x){'u'%in%x}))
+  count <- 1L
+  if (length(us)>0){
+    cat('Checking if new alleles are equal...')
+    for (u in seq_along(us)){
+      gene <- names(us[u])
+      out.tmp <- paste0(dnw, prefix, '.', gene, '.fasta')
+      gp <- grep('u', resu[, us[u]])
+      if (length(gp)>1){
+        sq <- seqinr::read.fasta(out.tmp, seqtype = 'DNA', as.string = TRUE)
+        ul <- unlist(sq)
+        gr <- split(names(ul), ul)
+        for (i in seq_along(gr)){
+          nu <- paste0('u', count)
+          n <- sapply(strsplit(gr[[i]],';'), '[', 2)
+          resu[n, us[u]] <- nu
+          if (write%in%c('new','all')){
+            out.newAllele <- paste0(dir, prefix, '.', gene, '.fasta')
+            sq <- seqinr::read.fasta(out.newAllele, seqtype = 'DNA', as.string = TRUE)
+            nsq <- sapply(paste0(';', n, ';'), function(z){ grep(z, names(sq), fixed = TRUE)})
+            spl <- do.call(rbind, strsplit(names(sq)[nsq], ';'))
+            spl[, 1] <- sub('u$', nu, spl[, 1])
+            names(sq)[nsq] <- paste0(spl, collapse = ';')
+            seqinr::write.fasta(sq,names = names(sq), file.out = out.newAllele, as.string = TRUE)
+          }
+          count <- count +1L
+        }
+      }else{
+        nu <- paste0('u', count)
+        resu[gp, us[u]] <- nu
+        if (write%in%c('new','all')){
+          out.newAllele <- paste0(dir, prefix, '.', gene, '.fasta')
+          is <- sub('[.]\\w+$','',rownames(resu)[gp])
+          sq <- seqinr::read.fasta(out.newAllele, seqtype = 'DNA', as.string = TRUE)
+          nsq <- grep(is, names(sq), fixed = TRUE)
+          spl <- strsplit(names(sq)[nsq], ';')[[1]]
+          spl[1] <- sub('u$', nu, spl[1])
+          names(sq)[nsq] <- paste0(spl, collapse = ';')
+          seqinr::write.fasta(sq,names = names(sq), file.out = out.newAllele, as.string = TRUE)
+        }
+        count <- count +1L
+      }
+    }
+    cat(' DONE!\n')
+  }
 
-
+  unlink(dnw, recursive = TRUE)
 
   #Detect ST
   apply(resu,1,function(x){
@@ -236,7 +281,19 @@ doMLST <- function(infiles,
   file.remove(el)
 
   #Return
-  return(resu)
+  prof <- prof[, colnames(resu)]
+  out <- list(result = resu,
+              profile = prof)
+
+  attr(out, 'infiles') <- infiles
+  attr(out, 'org') <- org
+  attr(out, 'scheme') <- scheme
+  attr(out, 'write') <- write
+  attr(out, 'pid') <- pid
+  attr(out, 'scov') <- scov
+  attr(out, 'class') <- 'mlst'
+
+  return(out)
 }
 
 
