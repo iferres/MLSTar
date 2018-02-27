@@ -285,7 +285,7 @@ doMLST <- function(infiles,
   out <- list(result = resu,
               profile = prof)
 
-  attr(out, 'infiles') <- infiles
+  attr(out, 'infiles') <- basename(infiles)
   attr(out, 'org') <- org
   attr(out, 'scheme') <- scheme
   attr(out, 'write') <- write
