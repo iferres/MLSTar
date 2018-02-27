@@ -60,9 +60,9 @@ plot.mlst <- function(mlst,
 
   m <- rbind(resu2, prof2)
 
-  d <- ape::dist.gene(m)
-  tree <- ape::mst(d)
-  g <- igraph::graph.adjacency(tree,
+  d <- dist.gene(m)
+  tree <- mst(d)
+  g <- graph.adjacency(tree,
                                mode = 'undirected')
 
 
