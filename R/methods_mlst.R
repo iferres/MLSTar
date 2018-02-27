@@ -31,6 +31,9 @@ print.mlst <- function(mlst){
 #' @description Plot a \code{mlst} object. A Minimum Spanning Tree is generated
 #' and a graph plot is rendered.
 #' @param mlst An object of class \code{mlst}.
+#' @param what One of "result", "profile", "both" (default). What should be
+#' plotted. White nodes are plotted for those isolates with no ST assigned. If
+#' "both", isolates with assigned ST are plotted in blue.
 #' @param vertex.size The size of the vertex. Default: 3.
 #' @param vertex.label Default: NA.
 #' @param layout layout. Default: layout.fruchterman.reingold.
@@ -40,30 +43,53 @@ print.mlst <- function(mlst){
 #' (invisible).
 #' @importFrom ape dist.gene mst
 #' @importFrom igraph graph.adjacency V plot.igraph
+#' @export
 plot.mlst <- function(mlst,
+                      what = 'both',
                       vertex.size = 3,
                       vertex.label = NA,
                       layout = layout.fruchterman.reingold,
                       plot = TRUE,
                       ...){
 
-  resu <- mlst$result
-  nas <- is.na(resu$ST)
-  sts <- resu$ST[which(!nas)]
-  nst <- rownames(which(nas))
-  di <- dim(resu)
-  resu2 <- resu[, -di[2]]
+  what <- match.arg(what, choices = c('result', 'profile', 'both'))
 
-  prof <- mlst$profile
-  di2 <- dim(prof)
-  prof2 <- prof[, -di2[2]]
+  if(what=='result'){
 
-  m <- rbind(resu2, prof2)
+    resu <- mlst$result
+    nas <- is.na(resu$ST)
+    sts <- resu$ST[which(!nas)]
+    nst <- rownames(which(nas))
+    di <- dim(resu)
+    m <- resu[, -di[2]]
+
+  }else if(what=='profile'){
+
+    prof <- mlst$profile
+    di2 <- dim(prof)
+    m <- prof[, -di2[2]]
+
+  }else{
+
+    resu <- mlst$result
+    nas <- is.na(resu$ST)
+    sts <- resu$ST[which(!nas)]
+    nst <- rownames(which(nas))
+    di <- dim(resu)
+    resu2 <- resu[, -di[2]]
+
+    prof <- mlst$profile
+    di2 <- dim(prof)
+    prof2 <- prof[, -di2[2]]
+
+    m <- rbind(resu2, prof2)
+
+  }
+
 
   d <- dist.gene(m)
   tree <- mst(d)
-  g <- graph.adjacency(tree,
-                               mode = 'undirected')
+  g <- graph.adjacency(tree, mode = 'undirected')
 
 
   ### Start device functions ###
@@ -73,9 +99,14 @@ plot.mlst <- function(mlst,
   dev.hold()
 
 
-  V(g)$color <- 1
-  V(g)[sts]$color <- 2
-  V(g)[nst]$color <- NA
+  if (what=='result'){
+    V(g)$color <- 1
+    V(g)[nst]$color <- NA
+  }else if(what=='both'){
+    V(g)$color <- 1
+    V(g)[sts]$color <- 2
+    V(g)[nst]$color <- NA
+  }
 
 
   if(plot){
