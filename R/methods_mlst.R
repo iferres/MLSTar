@@ -19,17 +19,18 @@ as.data.frame.mlst <- function(mlst){
   mlst$result
 }
 
-summary.mlst <- function(mlst){
-
-
-
-}
+# summary.mlst <- function(mlst){
+#
+#
+#
+# }
 
 
 plot.mlst <- function(mlst,
-                      vertex.size = 5,
+                      vertex.size = 3,
                       vertex.label = NA,
                       layout = layout.fruchterman.reingold,
+                      plot = TRUE,
                       ...){
 
   resu <- mlst$result
@@ -50,15 +51,30 @@ plot.mlst <- function(mlst,
   g <- igraph::graph.adjacency(tree,
                                mode = 'undirected')
 
+
+  ### Start device functions ###
+  op <- par(no.readonly = T)
+  on.exit(dev.flush())
+  on.exit(par(op), add = TRUE)
+  dev.hold()
+
+
   V(g)$color <- 1
   V(g)[sts]$color <- 2
   V(g)[nst]$color <- NA
 
-  plot(g,
-       layout = layout,
-       vertex.label = vertex.label,
-       vertex.size = vertex.size,
-       ...)
+
+  if(plot){
+
+    par(mar=c(0,0,0,0)+.1)
+    plot(g,
+         layout = layout,
+         vertex.label = vertex.label,
+         vertex.size = vertex.size,
+         ...)
+
+  }
+
 
   invisible(g)
 
