@@ -1,3 +1,4 @@
+#' @export
 print.mlst <- function(mlst){
 
   infiles <- attr(mlst, 'infiles')
@@ -15,9 +16,9 @@ print.mlst <- function(mlst){
 }
 
 
-as.data.frame.mlst <- function(mlst){
-  mlst$result
-}
+# as.data.frame.mlst <- function(mlst){
+#   mlst$result
+# }
 
 # summary.mlst <- function(mlst){
 #
@@ -25,7 +26,20 @@ as.data.frame.mlst <- function(mlst){
 #
 # }
 
-
+#' @name plot.mlst
+#' @title Plot A mlst Object
+#' @description Plot a \code{mlst} object. A Minimum Spanning Tree is generated
+#' and a graph plot is rendered.
+#' @param mlst An object of class \code{mlst}.
+#' @param vertex.size The size of the vertex. Default: 3.
+#' @param vertex.label Default: NA.
+#' @param layout layout. Default: layout.fruchterman.reingold.
+#' @param plot Default: TRUE.
+#' @param ... Further arguments to pass to \link[igraph]{plot.igraph}.
+#' @return A minimum spanning tree plot and an object of class \code{igraph}
+#' (invisible).
+#' @importFrom ape dist.gene mst
+#' @importFrom igraph graph.adjacency V plot.igraph
 plot.mlst <- function(mlst,
                       vertex.size = 3,
                       vertex.label = NA,
