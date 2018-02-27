@@ -119,8 +119,6 @@ readBlastResult <- function(blout=''){
 #' sequences (see \code{write}). (Default: \code{"allele"}).
 #' @param dir The directory where to put the fasta file of allele sequences
 #' found.
-#' @param dnw Temporary directory where to put new alleles to check later if
-#' are the same.
 #' @return The allele number id if an exact match with a reported mlst gene is
 #' found, a name arbitrarily given if a new allele is found, or \code{NA} if no
 #' alleles are found.
@@ -131,15 +129,12 @@ processBlastResult <- function(blastRes,
                                scov=0.9,
                                write='new',
                                prefix = 'alleles',
-                               dir='.',
-                               dnw=paste0(dir, 'tmp/')
-                               ){
+                               dir='.'){
 
   write <- match.arg(write, c('none', 'new', 'all'))
   dir <- paste0(normalizePath(dir),'/')
   gene <- attr(blastRes,'indb')
   out.newAllele <- paste0(dir, prefix, '.', gene, '.fasta')
-  out.tmp <- paste0(dnw, prefix, '.', gene, '.fasta')
   gid <- attr(blastRes,'infile')
 
   if (class(blastRes)!='try-error'){
@@ -178,13 +173,12 @@ processBlastResult <- function(blastRes,
       allele <- 'u'
       names(allele) <- gene
 
-      sq <- blastRes$qseq[wh]
-      qid <- blastRes$qid[wh]
-      hit <- paste0(gene, '_u')
-      nsq <- paste0(hit, ';', gid, ';', qid)
-
       if (write%in%c('new', 'all')){
 
+        sq <- blastRes$qseq[wh]
+        qid <- blastRes$qid[wh]
+        hit <- paste0(gene, '_u')
+        nsq <- paste0(hit, ';', gid, ';', qid)
         write.fasta(sequences = sq,
                     names = nsq,
                     file.out = out.newAllele,
@@ -192,15 +186,6 @@ processBlastResult <- function(blastRes,
                     as.string = TRUE)
 
       }
-
-      # Write anyway to dir/tmp/ to check later if are the same
-      write.fasta(sequences = sq,
-                  names = nsq,
-                  file.out = out.tmp,
-                  open = 'a',
-                  as.string = TRUE)
-
-
       return(allele)
 
     }else{

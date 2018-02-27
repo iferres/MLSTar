@@ -5,7 +5,7 @@
 \title{Process Blastn Result}
 \usage{
 processBlastResult(blastRes, pid = 90, scov = 0.9, write = "new",
-  prefix = "alleles", dir = ".", dnw = paste0(dir, "tmp/"))
+  prefix = "alleles", dir = ".")
 }
 \arguments{
 \item{blastRes}{A \code{data.frame} as returned by \link{readBlastResult}.}
@@ -24,9 +24,6 @@ sequences (see \code{write}). (Default: \code{"allele"}).}
 
 \item{dir}{The directory where to put the fasta file of allele sequences
 found.}
-
-\item{dnw}{Temporary directory where to put new alleles to check later if
-are the same.}
 }
 \value{
 The allele number id if an exact match with a reported mlst gene is

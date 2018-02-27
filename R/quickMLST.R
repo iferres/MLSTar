@@ -70,12 +70,7 @@ doMLST <- function(infiles,
     stop('blastn binary is not in $PATH. Please install it before running this function.')
   }
 
-  if(!dir.exists(dir)){
-    dir.create(dir)
-    dir <- paste0(normalizePath(dir),'/')
-  }else{
-    dir <- paste0(normalizePath(dir),'/')
-  }
+  paste0(normalizePath(dir),'/') -> dir
 
   if(pid>100){
     stop('pid must be a integer smaller than 100.')
@@ -181,83 +176,24 @@ doMLST <- function(infiles,
   cat(' DONE!\n')
 
 
-  #Create tmp dir to put new alleles
-  dnw <- paste0(dir, 'tmp/')
-  if(!dir.exists(dnw)){
-    dir.create(dnw)
-  }else{
-    unlink(dnw, recursive = TRUE)
-    dir.create(dnw)
-  }
-
   #Determine mlst for each genome
   normalizePath(infiles) -> infiles
   cat('Running BLASTN...')
-  resu <- parallel::mclapply(infiles,function(x){
+  parallel::mclapply(infiles,function(x){
     mlst(genome = x,
          dbs = dbs,
          write = write,
          prefix = prefix,
          dir = dir,
-         dnw = dnw,
          n_threads = 1L,
          outf = outf,
          pid = pid,
          scov = scov)
-  }, mc.preschedule = T,mc.cores = n_threads)
+  }, mc.preschedule = T,mc.cores = n_threads) -> ress
   cat(' DONE!\n')
-  resu <- do.call(rbind,resu)
-  rownames(resu) <- sub('[.]\\w+$','',basename(infiles))
-  resu <- as.data.frame(resu, stringsAsFactors = FALSE)
-
-  #Check if 'u'nknowns are not the same, and name accordingly.
-  us <- which(apply(resu, 2,function(x){'u'%in%x}))
-  count <- 1L
-  if (length(us)>0){
-    cat('Checking if new alleles are equal...')
-    for (u in seq_along(us)){
-      gene <- names(us[u])
-      out.tmp <- paste0(dnw, prefix, '.', gene, '.fasta')
-      gp <- grep('u', resu[, us[u]])
-      if (length(gp)>1){
-        sq <- seqinr::read.fasta(out.tmp, seqtype = 'DNA', as.string = TRUE)
-        ul <- unlist(sq)
-        gr <- split(names(ul), ul)
-        for (i in seq_along(gr)){
-          nu <- paste0('u', count)
-          n <- sapply(strsplit(gr[[i]],';'), '[', 2)
-          resu[n, us[u]] <- nu
-          if (write%in%c('new','all')){
-            out.newAllele <- paste0(dir, prefix, '.', gene, '.fasta')
-            sq <- seqinr::read.fasta(out.newAllele, seqtype = 'DNA', as.string = TRUE)
-            nsq <- sapply(paste0(';', n, ';'), function(z){ grep(z, names(sq), fixed = TRUE)})
-            spl <- do.call(rbind, strsplit(names(sq)[nsq], ';'))
-            spl[, 1] <- sub('u$', nu, spl[, 1])
-            names(sq)[nsq] <- paste0(spl, collapse = ';')
-            seqinr::write.fasta(sq,names = names(sq), file.out = out.newAllele, as.string = TRUE)
-          }
-          count <- count +1L
-        }
-      }else{
-        nu <- paste0('u', count)
-        resu[gp, us[u]] <- nu
-        if (write%in%c('new','all')){
-          out.newAllele <- paste0(dir, prefix, '.', gene, '.fasta')
-          is <- sub('[.]\\w+$','',rownames(resu)[gp])
-          sq <- seqinr::read.fasta(out.newAllele, seqtype = 'DNA', as.string = TRUE)
-          nsq <- grep(is, names(sq), fixed = TRUE)
-          spl <- strsplit(names(sq)[nsq], ';')[[1]]
-          spl[1] <- sub('u$', nu, spl[1])
-          names(sq)[nsq] <- paste0(spl, collapse = ';')
-          seqinr::write.fasta(sq,names = names(sq), file.out = out.newAllele, as.string = TRUE)
-        }
-        count <- count +1L
-      }
-    }
-    cat(' DONE!\n')
-  }
-
-  unlink(dnw, recursive = TRUE)
+  do.call(rbind,ress) -> resu
+  rownames(resu) <- sub('.fas$','',sapply(infiles,function(x){rev(strsplit(x,'/')[[1]])[1]}))
+  as.data.frame(resu) -> resu
 
   #Detect ST
   apply(resu,1,function(x){
@@ -281,19 +217,7 @@ doMLST <- function(infiles,
   file.remove(el)
 
   #Return
-  prof <- prof[, colnames(resu)]
-  out <- list(result = resu,
-              profile = prof)
-
-  attr(out, 'infiles') <- basename(infiles)
-  attr(out, 'org') <- org
-  attr(out, 'scheme') <- scheme
-  attr(out, 'write') <- write
-  attr(out, 'pid') <- pid
-  attr(out, 'scov') <- scov
-  attr(out, 'class') <- 'mlst'
-
-  return(out)
+  return(resu)
 }
 
 
@@ -311,8 +235,6 @@ doMLST <- function(infiles,
 #' @param dir An existing directory where to put the loci fasta files in case
 #' they are not provided by the user. Also sequences found will be placed here
 #' if \code{write} is set to ethier \code{"new"} or \code{"all"}.
-#' @param dnw Temporary directory where to put new alleles to check later if
-#' are the same.
 #' @param n_threads \code{integer}. The number of threads to use by BLASTN.
 #' @param outf Where the blastn output will be written.
 #' @param pid Percentage identity.
@@ -333,7 +255,6 @@ mlst <- function(genome,
                  write='new',
                  prefix = 'allele',
                  dir='.',
-                 dnw = paste0(dir, 'tmp/'),
                  n_threads=1L,
                  outf=tempdir(),
                  pid=90,
@@ -354,7 +275,6 @@ mlst <- function(genome,
                             write=write,
                             prefix = prefix,
                             dir = dir,
-                            dnw = dnw,
                             pid = pid,
                             scov = scov)
     res[i] <- as.character(a)
