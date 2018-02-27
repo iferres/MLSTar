@@ -86,7 +86,11 @@ blastn <- function(genome='',
 readBlastResult <- function(blout=''){
 
   cols<-c('qid','sid','pid','gaps','lgth','qstart','qend','evalue','qseq')
-  try(read.table(blout,header = F,col.names = cols, stringsAsFactors = FALSE),
+  try(read.csv(blout,
+               header = F,
+               col.names = cols,
+               sep = '\t',
+               stringsAsFactors = FALSE),
       silent = T) -> res
   rev(strsplit(blout,'/')[[1]])[1] -> fi
   strsplit(fi,'_vs_')[[1]][1] -> infile
