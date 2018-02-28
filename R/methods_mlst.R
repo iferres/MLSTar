@@ -73,8 +73,8 @@ plot.mlst <- function(x,
 
     resu <- x$result
     nas <- is.na(resu$ST)
-    sts <- resu$ST[which(!nas)]
-    nst <- rownames(which(nas))
+    sts <- which(!nas)
+    nst <- which(nas)
     di <- dim(resu)
     resu2 <- resu[, -di[2]]
 
