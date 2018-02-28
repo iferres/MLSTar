@@ -1,9 +1,9 @@
 #' @export
 print.mlst <- function(x, ...){
 
-  infiles <- attr(mlst, 'infiles')
-  org <- attr(mlst, 'org')
-  scheme <- attr(mlst, 'scheme')
+  infiles <- attr(x, 'infiles')
+  org <- attr(x, 'org')
+  scheme <- attr(x, 'scheme')
   pr <- paste0('MLST\n ',
                length(infiles),
                ' isolates\n organism: ',
