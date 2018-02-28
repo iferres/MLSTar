@@ -62,7 +62,7 @@ blastn <- function(genome='',
   dbn <- rev(strsplit(db,'/')[[1]])[1]
   gnam <- rev(strsplit(genome,'/')[[1]])[1]
   outfile <- paste0(outdir,sub('.f\\w+$','',gnam),'_vs_',sub('[.]\\w+$','',dbn))
-  cmd<-paste0("blastn -query ",genome,
+  cmd<-paste0("blastn -word_size 32 -ungapped -dust no -query ",genome,
               " -db ",db,
               " -evalue ",eval,
               " -outfmt '6 qseqid sseqid pident gaps length qstart qend evalue qseq'",
