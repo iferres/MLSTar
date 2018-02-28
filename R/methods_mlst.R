@@ -1,5 +1,5 @@
 #' @export
-print.mlst <- function(mlst){
+print.mlst <- function(x, ...){
 
   infiles <- attr(mlst, 'infiles')
   org <- attr(mlst, 'org')
@@ -30,25 +30,25 @@ print.mlst <- function(mlst){
 #' @title Plot A mlst Object
 #' @description Plot a \code{mlst} object. A Minimum Spanning Tree is generated
 #' and a graph plot is rendered.
-#' @param mlst An object of class \code{mlst}.
+#' @param x An object of class \code{mlst}.
 #' @param what One of "result", "profile", "both" (default). What should be
 #' plotted. White nodes are plotted for those isolates with no ST assigned. If
 #' "both", isolates with assigned ST are plotted in blue.
 #' @param vertex.size The size of the vertex. Default: 3.
 #' @param vertex.label Default: NA.
-#' @param layout layout. Default: layout.fruchterman.reingold.
 #' @param plot Default: TRUE.
 #' @param ... Further arguments to pass to \link[igraph]{plot.igraph}.
 #' @return A minimum spanning tree plot and an object of class \code{igraph}
 #' (invisible).
 #' @importFrom ape dist.gene mst
-#' @importFrom igraph graph.adjacency V plot.igraph
+#' @importFrom igraph graph.adjacency V<- V plot.igraph
+#' @importFrom grDevices dev.flush dev.hold
+#' @importFrom graphics plot par
 #' @export
-plot.mlst <- function(mlst,
+plot.mlst <- function(x,
                       what = 'both',
                       vertex.size = 3,
                       vertex.label = NA,
-                      layout = layout.fruchterman.reingold,
                       plot = TRUE,
                       ...){
 
@@ -56,7 +56,7 @@ plot.mlst <- function(mlst,
 
   if(what=='result'){
 
-    resu <- mlst$result
+    resu <- x$result
     nas <- is.na(resu$ST)
     sts <- resu$ST[which(!nas)]
     nst <- rownames(which(nas))
@@ -65,20 +65,20 @@ plot.mlst <- function(mlst,
 
   }else if(what=='profile'){
 
-    prof <- mlst$profile
+    prof <- x$profile
     di2 <- dim(prof)
     m <- prof[, -di2[2]]
 
   }else{
 
-    resu <- mlst$result
+    resu <- x$result
     nas <- is.na(resu$ST)
     sts <- resu$ST[which(!nas)]
     nst <- rownames(which(nas))
     di <- dim(resu)
     resu2 <- resu[, -di[2]]
 
-    prof <- mlst$profile
+    prof <- x$profile
     di2 <- dim(prof)
     prof2 <- prof[, -di2[2]]
 
@@ -113,7 +113,6 @@ plot.mlst <- function(mlst,
 
     par(mar=c(0,0,0,0)+.1)
     plot(g,
-         layout = layout,
          vertex.label = vertex.label,
          vertex.size = vertex.size,
          ...)

@@ -12,7 +12,10 @@ Imports:
   parallel,
   httr,
   jsonlite, 
-  seqinr
+  seqinr,
+  ape,
+  grDevices,
+  graphics
 Depends: 
   R (>= 3.2.3),
   igraph

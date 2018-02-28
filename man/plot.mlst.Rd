@@ -4,12 +4,11 @@
 \alias{plot.mlst}
 \title{Plot A mlst Object}
 \usage{
-\method{plot}{mlst}(mlst, what = "both", vertex.size = 3,
-  vertex.label = NA, layout = layout.fruchterman.reingold, plot = TRUE,
-  ...)
+\method{plot}{mlst}(x, what = "both", vertex.size = 3, vertex.label = NA,
+  plot = TRUE, ...)
 }
 \arguments{
-\item{mlst}{An object of class \code{mlst}.}
+\item{x}{An object of class \code{mlst}.}
 
 \item{what}{One of "result", "profile", "both" (default). What should be
 plotted. White nodes are plotted for those isolates with no ST assigned. If
@@ -18,8 +17,6 @@ plotted. White nodes are plotted for those isolates with no ST assigned. If
 \item{vertex.size}{The size of the vertex. Default: 3.}
 
 \item{vertex.label}{Default: NA.}
-
-\item{layout}{layout. Default: layout.fruchterman.reingold.}
 
 \item{plot}{Default: TRUE.}
 
