@@ -8,6 +8,8 @@ Authors@R: c(
     person("Gregorio", "Iraola", email = "giraola@pasteur.edu.uy", role = "aut")
     )
 Maintainer: <iferres@pasteur.edu.uy>
+Depends:
+  igraph
 Imports:
   parallel,
   httr,
