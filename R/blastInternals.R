@@ -151,6 +151,11 @@ processBlastResult <- function(blastRes,
 
       wh <- which(blastRes$pid==100 &
                     blastRes$scov==1)
+
+      if(length(wh)>1){
+        wh <- wh[which.min(blastRes$evalue[wh])]
+      }
+
       hit <- blastRes$sid[wh]
       spl <- rev(strsplit(hit,'_')[[1]])[1]
       allele <- as.character(spl)
