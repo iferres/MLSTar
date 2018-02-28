@@ -8,14 +8,14 @@ Authors@R: c(
     person("Gregorio", "Iraola", email = "giraola@pasteur.edu.uy", role = "aut")
     )
 Maintainer: <iferres@pasteur.edu.uy>
-Depends:
-  igraph
 Imports:
   parallel,
   httr,
   jsonlite, 
   seqinr
-Depends: R (>= 3.2.3)
+Depends: 
+  R (>= 3.2.3),
+  igraph
 Description: Access pubmlst.org data from within R and perform MLST of your genomes (in fasta format) for a given scheme of your organism of interest.
 License: MIT + file LICENSE
 LazyData: TRUE
