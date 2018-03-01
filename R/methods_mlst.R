@@ -87,7 +87,7 @@ plot.mlst <- function(x,
   }
 
 
-  d <- dist.gene(m)
+  d <- dist.gene(m)/(dim(m)[2]-1L)
   tree <- mst(d)
   g <- graph.adjacency(tree, mode = 'undirected')
 
