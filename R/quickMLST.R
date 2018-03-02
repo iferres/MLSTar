@@ -17,15 +17,14 @@
 #' \code{"none"}. The fist one writes only new alleles found (not reported in
 #' pubmlst.org), the second writes all alleles found, and "none" do not write
 #' any file.
-#' @param prefix \code{character} A prefix to the fasta files of found
-#' sequences (see \code{write}). (Default: \code{"allele"}).
-#' @param dir An existing directory where to put the loci fasta files in case
-#' they are not provided by the user. Also sequences found will be placed here
-#' if \code{write} is set to ethier \code{"new"} or \code{"all"}.
+#' @param ddir A non-existing directory where to download the loci fasta files
+#' in case they are not provided by the user. Default:
+#' \code{paste0('pubmlst','_',org,'_',scheme)}
+#' @param fdir A non-existing directory where to write fasta files of found
+#' sequences (see \code{write}). (Default:
+#' \code{paste0('alleles','_',org,'_',scheme)}).
 #' @param n_threads \code{integer}. The number of cores to use. Each job consist
 #' on the process for one genome. Blastn searches will use 1 core per job.
-#' @param outf Where blastn output will be written. By default, in a temp
-#' directory.
 #' @param pid Percentage identity threshold to be consider as an allele. An
 #' \code{integer} <= 100. (Default: 90).
 #' @param scov Subject coverage threshold to be consider as an allele. A
@@ -55,10 +54,9 @@ doMLST <- function(infiles,
                    schemeFastas=NULL,
                    schemeProfile=NULL,
                    write = 'new',
-                   prefix = 'allele',
-                   dir='.',
+                   ddir = paste0('pubmlst','_',org,'_',scheme),
+                   fdir = paste0('alleles','_',org,'_',scheme),
                    n_threads=1L,
-                   outf=tempdir(),
                    pid=90L,
                    scov=0.9){
 
@@ -70,11 +68,25 @@ doMLST <- function(infiles,
     stop('blastn binary is not in $PATH. Please install it before running this function.')
   }
 
-  if(!dir.exists(dir)){
-    dir.create(dir)
-    dir <- paste0(normalizePath(dir),'/')
-  }else{
-    dir <- paste0(normalizePath(dir),'/')
+  if (is.null(schemeFastas) | is.null(schemeProfile)){
+    if(!dir.exists(ddir)){
+      dir.create(ddir)
+      ddir <- paste0(normalizePath(ddir),'/')
+    }else{
+      stop(paste0(ddir, ' already exists.'))
+    }
+  }
+
+  write <- match.arg(write, c('none', 'new', 'all'))
+
+  if (write%in%c('new', 'all')){
+    if(!dir.exists(fdir)){
+      #dont normalize path because in following steps directories are created
+      # recursively.
+      dir.create(fdir)
+    }else{
+      stop(paste0(fdir, ' already exists.'))
+    }
   }
 
   if(pid>100){
@@ -104,10 +116,10 @@ doMLST <- function(infiles,
 
     cat(paste0('Downloading ',org,
                ' scheme ',scheme,
-               ' MLST sequences at ',dir,'/ .\n'))
+               ' MLST sequences at ',ddir,'/ .\n'))
     schemeFastas <- downloadPubmlst_seq(org = org,
                                         scheme=scheme,
-                                        dir = dir,
+                                        dir = ddir,
                                         n_threads = 1L)
   }else{
 
@@ -116,10 +128,10 @@ doMLST <- function(infiles,
               immediate. = T)
       cat(paste0('Downloading ',org,
                  ' scheme ',scheme,
-                 ' MLST sequences at ',dir,'/ .\n'))
+                 ' MLST sequences at ',ddir,'/ .\n'))
       schemeFastas <- downloadPubmlst_seq(org = org,
                                           scheme=scheme,
-                                          dir = dir,
+                                          dir = ddir,
                                           n_threads = 1L)
     }else{
       all(grepl('.fas$',schemeFastas)) -> ext
@@ -145,10 +157,10 @@ doMLST <- function(infiles,
   if (is.null(schemeProfile)){
     cat(paste0('Downloading ',org,
                ' scheme ',scheme,
-               ' MLST profile at ',dir,'/ .\n'))
+               ' MLST profile at ',ddir,'/ .\n'))
     schemeProfile <- downloadPubmlst_profile(org = org,
                                              scheme = scheme,
-                                             dir = dir)
+                                             dir = ddir)
     prof <- read.csv(schemeProfile,sep = '\t',header = T)
 
   }else{
@@ -156,10 +168,10 @@ doMLST <- function(infiles,
       warning('schemeProfile file missing, downloading..',immediate. = T)
       cat(paste0('Downloading ',org,
                  ' scheme ',scheme,
-                 ' MLST profile at ',dir,'/ .\n'))
+                 ' MLST profile at ',ddir,'/ .\n'))
       schemeProfile <- downloadPubmlst_profile(org = org,
                                                scheme = scheme,
-                                               dir = dir)
+                                               dir = ddir)
       prof <- read.csv(schemeProfile,sep = '\t',header = T)
     }else{
       prof <- read.csv(schemeProfile,sep = '\t',header = T)
@@ -187,17 +199,17 @@ doMLST <- function(infiles,
       },mc.preschedule = F,mc.cores = n_threads) -> dbs
       unlist(dbs) -> dbs
       cat(' DONE!\n')
+    }else{
+      dbs <- sub('fas$', '', schemeFastas)
     }
-  }
-
-
-  #Create tmp dir to put new alleles
-  dnw <- paste0(dir, 'tmp/')
-  if(!dir.exists(dnw)){
-    dir.create(dnw)
   }else{
-    unlink(dnw, recursive = TRUE)
-    dir.create(dnw)
+    #Make BLAST DATABASEs
+    cat('Making BLAST databases...')
+    parallel::mclapply(schemeFastas,function(x){
+      makeblastdb(infile = x)
+    },mc.preschedule = F,mc.cores = n_threads) -> dbs
+    unlist(dbs) -> dbs
+    cat(' DONE!\n')
   }
 
   #Determine mlst for each genome
@@ -207,11 +219,11 @@ doMLST <- function(infiles,
     mlst(genome = x,
          dbs = dbs,
          write = write,
-         prefix = prefix,
-         dir = dir,
-         dnw = dnw,
+         prefix = fdir,
+         dir = getwd(),
+         # dnw = dnw,
          n_threads = 1L,
-         outf = outf,
+         outf = tempdir(),
          pid = pid,
          scov = scov)
   }, mc.preschedule = T,mc.cores = n_threads)
@@ -223,9 +235,8 @@ doMLST <- function(infiles,
   resu <- processResu(resu = resu,
                       write = write,
                       dbs = dbs,
-                      dnw = dnw,
-                      dir = dir,
-                      prefix = prefix)
+                      dir = paste0(getwd(),'/'),
+                      prefix = fdir)
 
   #Detect ST
   apply(resu,1,function(x){
@@ -240,13 +251,6 @@ doMLST <- function(infiles,
     resu$ST <- NA
   }
 
-
-  #Remove blast databases
-  # c('.nsq','.nin','.nhr')-> dbext
-  # unlist(sapply(sub('.fas$','',schemeFastas),function(x){
-  #   paste0(x,dbext)
-  #   },simplify = F)) -> el
-  # file.remove(el)
 
   #Return
   prof <- prof[, colnames(resu)]

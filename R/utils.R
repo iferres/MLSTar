@@ -1,4 +1,9 @@
-processResu <- function(resu, write, dbs, dnw, dir, prefix){
+processResu <- function(resu,
+                        write,
+                        dbs,
+                        dir,
+                        dnw = paste0(dir, 'tmp/'),
+                        prefix){
 
   #Cat files
   sapply(basename(dbs), function(x){
