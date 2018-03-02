@@ -138,9 +138,17 @@ processBlastResult <- function(blastRes,
   write <- match.arg(write, c('none', 'new', 'all'))
   dir <- paste0(normalizePath(dir),'/')
   gene <- attr(blastRes,'indb')
-  out.newAllele <- paste0(dir, prefix, '.', gene, '.fasta')
-  out.tmp <- paste0(dnw, prefix, '.', gene, '.fasta')
+  fi <- paste0(gene, '.fasta')
   gid <- attr(blastRes,'infile')
+  dtow <- paste0(dir, prefix, '/', gid, '/')
+  ftow <- paste0(dtow, fi)
+  dtmp <- paste0(dnw, '/', gid, '/')
+  ftmp <- paste0(dtmp, fi)
+
+  if(write%in%c('new','all')){
+    dir.create(dtow, recursive = TRUE, showWarnings = FALSE)
+  }
+  dir.create(dtmp, recursive = TRUE, showWarnings = FALSE)
 
   if (class(blastRes)!='try-error'){
     blastRes$scov <- (blastRes$lgth - blastRes$gaps) /
@@ -167,8 +175,8 @@ processBlastResult <- function(blastRes,
         nsq <- paste0(hit, ';', gid, ';', qid)
         write.fasta(sequences = sq,
                     names = nsq,
-                    file.out = out.newAllele,
-                    open = 'a',
+                    file.out = ftow,
+                    # open = 'a',
                     as.string = TRUE)
       }
 
@@ -192,8 +200,8 @@ processBlastResult <- function(blastRes,
 
         write.fasta(sequences = sq,
                     names = nsq,
-                    file.out = out.newAllele,
-                    open = 'a',
+                    file.out = ftow,
+                    # open = 'a',
                     as.string = TRUE)
 
       }
@@ -201,8 +209,8 @@ processBlastResult <- function(blastRes,
       # Write anyway to dir/tmp/ to check later if are the same
       write.fasta(sequences = sq,
                   names = nsq,
-                  file.out = out.tmp,
-                  open = 'a',
+                  file.out = ftmp,
+                  # open = 'a',
                   as.string = TRUE)
 
 
