@@ -123,8 +123,8 @@ genomes
     ##  [7] "1218567.3.fasta" "174.14.fasta"    "174.15.fasta"   
     ## [10] "174.17.fasta"
 
-In this example we have 10 pathogenic *Leptospira borgpetersenii* genomes(__ \* __), in fasta format. 
-(__ \* __: Because of portability, just the corresponding alleles of each genomes are written in the fasta files for the scheme 1, and not the whole genomes. The purpose is to show the functions and not to provide a real case example.)
+In this example we have 10 pathogenic *Leptospira borgpetersenii* genomes(__ \\* __), in fasta format. 
+(__ \\* __: Because of portability, just the corresponding alleles of each genomes are written in the fasta files for the scheme 1, and not the whole genomes. The purpose is to show the functions and not to provide a real case example.)
 
 Lets determine the MLST for the scheme 1.
 
