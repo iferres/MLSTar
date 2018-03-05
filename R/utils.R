@@ -76,7 +76,7 @@ processResu <- function(resu,
         resu[gp, us[u]] <- nu
         if (write%in%c('new','all')){
           out.newAllele <- paste0(dir, prefix, '/', gene, '.fasta')
-          is <- sub('[.]\\w+$','',rownames(resu)[gp])
+          is <- rownames(resu)[gp]
           sq <- seqinr::read.fasta(out.newAllele, seqtype = 'DNA', as.string = TRUE)
           nsq <- grep(is, names(sq), fixed = TRUE)
           spl <- strsplit(names(sq)[nsq], ';')[[1]]
