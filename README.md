@@ -123,9 +123,9 @@ genomes
     ##  [7] "1218567.3.fasta" "174.14.fasta"    "174.15.fasta"   
     ## [10] "174.17.fasta"
 
-In this example we have 10 pathogenic *Leptospira borgpetersenii* genomes ( **\*** ), in fasta format. 
+In this example we have 10 pathogenic *Leptospira borgpetersenii* genomes( **\*** ), in fasta format. 
 
-( **\*** : Because of portability, just the corresponding alleles of each genomes are written in the fasta files for the scheme 1, and not the whole genomes. The purpose is to show the functions and not to provide a real case example.)
+( **\*** ): Because of portability, just the corresponding alleles of each genomes are written in the fasta files for the scheme 1, and not the whole genomes. The purpose is to show the functions and not to provide a real case example.)
 
 Lets determine the MLST for the scheme 1.
 
@@ -140,6 +140,7 @@ x <- doMLST(infiles = genomes, # The fasta files
     ## Downloading leptospira scheme 1 MLST profile at /home/iferres/Documents/pubmlst_leptospira_1// .
     ## Making BLAST databases... DONE!
     ## Running BLASTN... DONE!
+    ## Checking if new alleles are equal... DONE!
 
 ``` r
 x
@@ -198,8 +199,8 @@ x$result
     ## 1049781.3     24     32     30     36     67     26     12 149
     ## 1218567.3     26     30     28     35     39     29     29 152
     ## 174.14        24     28     26     34     37     27     28 147
-    ## 174.15        24     28     30     34     37   <NA>     28  NA
-    ## 174.17        24     27     30     34     67   <NA>     28  NA
+    ## 174.15        24     28     30     34     37     27     28 148
+    ## 174.17        24     27     30     34     67     u1     28  NA
 
 ``` r
 # Profile (leptospira, scheme 1)
@@ -241,17 +242,17 @@ g <- plot(x, plot = FALSE)
 g
 ```
 
-    ## IGRAPH 92b652f UN-- 269 268 -- 
+    ## IGRAPH dae158c UN-- 269 268 -- 
     ## + attr: name (v/c), color (v/n)
-    ## + edges from 92b652f (vertex names):
+    ## + edges from dae158c (vertex names):
     ##  [1] 1049762.3--1049765.3 1049762.3--1049781.3 1049762.3--1        
-    ##  [4] 1049762.3--94        1049762.3--149       1049762.3--158      
-    ##  [7] 1049762.3--163       1049762.3--165       1049762.3--167      
+    ##  [4] 1049762.3--94        1049762.3--142       1049762.3--149      
+    ##  [7] 1049762.3--158       1049762.3--163       1049762.3--167      
     ## [10] 1049762.3--168       1049762.3--172       1049762.3--185      
     ## [13] 1049762.3--191       1049762.3--207       1049762.3--244      
-    ## [16] 1049762.3--245       1049765.3--1049766.3 1049765.3--174.17   
-    ## [19] 1049765.3--142       1049765.3--143       1049765.3--157      
-    ## [22] 1049765.3--209       1049773.3--174.15    1049773.3--154      
+    ## [16] 1049762.3--245       1049765.3--1049766.3 1049765.3--143      
+    ## [19] 1049765.3--144       1049765.3--209       1049773.3--174.15   
+    ## [22] 1049773.3--154       1049780.3--174.15    1049780.3--155      
     ## + ... omitted several edges
 
 Beware with plotting the whole profile: a extensive MLST profile with, for instance, a model organism could consume a lot of resources and take a log time. The distance and *mst* computation scale exponentially with the number of elements. In this cases you can choose to plot just your isolates:
