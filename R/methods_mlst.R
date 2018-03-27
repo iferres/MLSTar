@@ -40,18 +40,20 @@ print.mlst <- function(x, ...){
 #' @param ... Further arguments to pass to \link[igraph]{plot.igraph}.
 #' @return A minimum spanning tree plot and an object of class \code{igraph}
 #' (invisible).
-#' @importFrom ape dist.gene mst
+#' @importFrom ape dist.gene mst nj
 #' @importFrom igraph graph.adjacency V<- V plot.igraph
 #' @importFrom grDevices dev.flush dev.hold
 #' @importFrom graphics plot par
 #' @export
 plot.mlst <- function(x,
+                      type = 'mst',
                       what = 'both',
                       vertex.size = 3,
                       vertex.label = NA,
                       plot = TRUE,
                       ...){
 
+  type <- match.arg(type, choices = c('mst', 'tree'))
   what <- match.arg(what, choices = c('result', 'profile', 'both'))
 
   if(what=='result'){
@@ -88,8 +90,6 @@ plot.mlst <- function(x,
 
 
   d <- dist.gene(m)/(dim(m)[2]-1L)
-  tree <- mst(d)
-  g <- graph.adjacency(tree, mode = 'undirected')
 
 
   ### Start device functions ###
@@ -99,23 +99,37 @@ plot.mlst <- function(x,
   dev.hold()
 
 
-  if (what=='result'){
-    V(g)$color <- 1
-    V(g)[nst]$color <- NA
-  }else if(what=='both'){
-    V(g)$color <- 1
-    V(g)[sts]$color <- 2
-    V(g)[nst]$color <- NA
-  }
+  if (type=='mst'){
+
+    tree <- mst(d)
+    g <- graph.adjacency(tree, mode = 'undirected')
+
+    if (what=='result'){
+      V(g)$color <- 1
+      V(g)[nst]$color <- NA
+    }else if(what=='both'){
+      V(g)$color <- 1
+      V(g)[sts]$color <- 2
+      V(g)[nst]$color <- NA
+    }
 
 
-  if(plot){
+    if(plot){
 
-    par(mar=c(0,0,0,0)+.1)
-    plot(g,
-         vertex.label = vertex.label,
-         vertex.size = vertex.size,
-         ...)
+      par(mar=c(0,0,0,0)+.1)
+      plot(g,
+           vertex.label = vertex.label,
+           vertex.size = vertex.size,
+           ...)
+
+    }
+
+  }else{
+
+    g <- nj(d)
+    if(plot){
+      plot(g, type='unrooted', show.tip.labels = FALSE)
+    }
 
   }
 
