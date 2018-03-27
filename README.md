@@ -264,4 +264,4 @@ plot(x, what = 'result')
 
 ![](vignettes/unnamed-chunk-10-1.png)
 
-New methods will be added in the future. Any suggestions are wellcome.
+New methods will be added in the future. Any suggestions are welcomed.
