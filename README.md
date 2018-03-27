@@ -11,6 +11,7 @@ The easiest way to install this package is using `devtools`:
 ``` r
 devtools::install_github('iferres/MLSTar')
 ```
+**Note:** This package works on Unix-like platforms only.
 
 ### Requirements
 
