@@ -128,6 +128,19 @@ plot.mlst <- function(x,
 
     g <- nj(d)
     if(plot){
+
+      #' usar ape::nodelabels
+
+      # if (what=='result'){
+      #   V(g)$color <- 1
+      #   V(g)[nst]$color <- NA
+      # }else if(what=='both'){
+      #   V(g)$color <- 1
+      #   V(g)[sts]$color <- 2
+      #   V(g)[nst]$color <- NA
+      # }
+
+
       plot(g, type='unrooted', show.tip.labels = FALSE)
     }
 
