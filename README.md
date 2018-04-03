@@ -282,17 +282,16 @@ plot(x, what = 'result')
 The *mst* is the default plot method, but a binary tree can also be plotted, and in this case an object of class `phylo` (see APE package) is returned invisibly:
 
 ``` r
-op <- par(no.readonly = TRUE)
-par(mfrow=c(1, 2))
 
+layout(cbind(1,2))
 plot(x, type = 'phylo')
 plot(x, type = 'phylo', 
      plot.phylo.args = list(type = 'fan'), 
      tiplabels.args = list(offset = 0.1))
      
-par(op)
+
 ```
 
-![](vignettes/readme_files/figure-markdown_github/unnamed-chunk-11-1.png) ![](vignettes/readme_files/figure-markdown_github/unnamed-chunk-11-2.png)
+![](vignettes/readme_files/figure-markdown_github/pairs-chunk.png) 
 
 See `?plot.mlst` for more information about the plotting methods. New methods will be added in the future. Any suggestions are welcome.
