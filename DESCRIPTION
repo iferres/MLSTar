@@ -13,12 +13,13 @@ Imports:
   httr,
   jsonlite, 
   seqinr,
-  ape,
   grDevices,
-  graphics
+  graphics,
+  scales
 Depends: 
   R (>= 3.2.3),
-  igraph
+  igraph,
+  ape
 Description: Access pubmlst.org data from within R and perform MLST of your genomes (in fasta format) for a given scheme of your organism of interest.
 License: MIT + file LICENSE
 LazyData: TRUE

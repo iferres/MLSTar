@@ -4,29 +4,79 @@
 \alias{plot.mlst}
 \title{Plot A mlst Object}
 \usage{
-\method{plot}{mlst}(x, what = "both", vertex.size = 3, vertex.label = NA,
-  plot = TRUE, ...)
+\method{plot}{mlst}(x, type = "mst", what = "both", pt.size = 3,
+  label = FALSE, pf.col = "#E64B35FF", st.col = "#00A087FF",
+  nst.col = "white", alpha = 0.5, plot.igraph.args = list(),
+  plot.phylo.args = list(), tiplabels.args = list(), plot = TRUE, ...)
 }
 \arguments{
 \item{x}{An object of class \code{mlst}.}
 
+\item{type}{One of "mst" or "phylo", for plotting a Minimum Spanning Tree or
+a binary tree.}
+
 \item{what}{One of "result", "profile", "both" (default). What should be
-plotted. White nodes are plotted for those isolates with no ST assigned. If
-"both", isolates with assigned ST are plotted in blue.}
+plotted.}
 
-\item{vertex.size}{The size of the vertex. Default: 3.}
+\item{pt.size}{The size of the point. Default: 3.}
 
-\item{vertex.label}{Default: NA.}
+\item{label}{\code{logical}. Whether to plot node/tip labels or not. Default:
+\code{FALSE}.}
+
+\item{pf.col}{The color of profile nodes/tips. Ignored if \code{what="result"}.}
+
+\item{st.col}{The color of result nodes/tips which have an ST assigned.
+Ignored if \code{what="profile"}.}
+
+\item{nst.col}{The color of result nodes/tips with no ST assigned. Default:
+\code{"white"}. Ignored if \code{what="profile"}.}
+
+\item{alpha}{Color transparency, between [0,1]. See \link[scales]{alpha}.}
+
+\item{plot.igraph.args}{A \code{list} of arguments to be passed to
+\link[igraph]{plot.igraph}. Used only if \code{type="mst"}. Defaults try
+to keep aesthetics similar to \code{phylo}'s. Default: \code{list(vertex.label = if (label) NULL else NA,
+vertex.size = pt.size)}.}
+
+\item{plot.phylo.args}{A \code{list} of arguments to be passed to
+\link[ape]{plot.phylo}. Used only if \code{type="phylo"}. Defaults try to
+keep aesthetics similar to \code{mst}'s. Default: \code{list(type='unrooted',
+show.tip.label = label)}.}
+
+\item{tiplabels.args}{A \code{list} of arguments to be passed to
+\link[ape]{tiplabels}. Used only if \code{type="phylo"}. Defaults try to
+keep aesthetics similar to \code{mst}'s. Default: \code{list(pch = 21,
+cex = pt.size/5)}.}
 
 \item{plot}{Default: TRUE.}
 
-\item{...}{Further arguments to pass to \link[igraph]{plot.igraph}.}
+\item{...}{A list of arguments to be passed to \link[graphics]{par}.}
 }
 \value{
 A minimum spanning tree plot and an object of class \code{igraph}
-(invisible).
+(invisible) if \code{type="mst"}, or a binary tree plot and an object of
+class \code{phylo} (invisible) if \code{type="phylo"}.
 }
 \description{
-Plot a \code{mlst} object. A Minimum Spanning Tree is generated
-and a graph plot is rendered.
+Plot a \code{mlst} object. A Minimum Spanning Tree or a binary
+tree is rendered.
+}
+\details{
+Distance is calculated using \link[ape]{dist.gene} function over
+the allele matrix. This distance metric only takes into account the number
+of differences between each pair of rows in the matrix. If \code{type="mst"},
+\link[ape]{mst} function is used to calculate a minimum spanning tree, and
+a graph is generated using \link[igraph]{graph.adjacency}. If
+\code{type="phylo"}, a "phylogeny" is inferred using the distance calculated
+above and \link[ape]{nj} function (neighbour-joining tree). Ethier a
+\code{igraph} or a \code{phylo} object is returned invisibly so it can be
+further analysed using igraph/ape frameworks.
+
+It is worth noting that the result of this function is not strictly based on
+genetic information. The distance used just counts the number of differences
+on the allele profiles, it doesn't use a genetic model. The clustering
+methods are also simple and are not based on complex evolution models.
+Despite the above, since alleles in mlst schemes usually differ in 1 or few
+nucleotides, the described methodology gives good enough results to have a
+general overview of your data.
 }

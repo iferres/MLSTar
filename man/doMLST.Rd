@@ -5,8 +5,9 @@
 \title{Perform MLST Analysis Over a List of Genomes}
 \usage{
 doMLST(infiles, org = "leptospira", scheme = 1L, schemeFastas = NULL,
-  schemeProfile = NULL, write = "new", prefix = "allele", dir = ".",
-  n_threads = 1L, outf = tempdir(), pid = 90L, scov = 0.9)
+  schemeProfile = NULL, write = "new", ddir = paste0("pubmlst", "_", org,
+  "_", scheme), fdir = paste0("alleles", "_", org, "_", scheme),
+  n_threads = 1L, pid = 90L, scov = 0.9)
 }
 \arguments{
 \item{infiles}{A vector of genome sequences in fasta format.}
@@ -29,18 +30,16 @@ then it is downloaded from \url{http://rest.pubmlst.org} to \code{dir}.}
 pubmlst.org), the second writes all alleles found, and "none" do not write
 any file.}
 
-\item{prefix}{\code{character} A prefix to the fasta files of found
-sequences (see \code{write}). (Default: \code{"allele"}).}
+\item{ddir}{A non-existing directory where to download the loci fasta files
+in case they are not provided by the user. Default:
+\code{paste0('pubmlst','_',org,'_',scheme)}}
 
-\item{dir}{An existing directory where to put the loci fasta files in case
-they are not provided by the user. Also sequences found will be placed here
-if \code{write} is set to ethier \code{"new"} or \code{"all"}.}
+\item{fdir}{A non-existing directory where to write fasta files of found
+sequences (see \code{write}). (Default:
+\code{paste0('alleles','_',org,'_',scheme)}).}
 
 \item{n_threads}{\code{integer}. The number of cores to use. Each job consist
 on the process for one genome. Blastn searches will use 1 core per job.}
-
-\item{outf}{Where blastn output will be written. By default, in a temp
-directory.}
 
 \item{pid}{Percentage identity threshold to be consider as an allele. An
 \code{integer} <= 100. (Default: 90).}
