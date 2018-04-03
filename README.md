@@ -11,7 +11,6 @@ The easiest way to install this package is using `devtools`:
 ``` r
 devtools::install_github('iferres/MLSTar')
 ```
-**Note:** This package works on Unix-like platforms only.
 
 ### Requirements
 
@@ -38,6 +37,15 @@ library(MLSTar)
     ## The following object is masked from 'package:base':
     ## 
     ##     union
+
+    ## Loading required package: ape
+
+    ## 
+    ## Attaching package: 'ape'
+
+    ## The following objects are masked from 'package:igraph':
+    ## 
+    ##     edges, mst, ring
 
 ``` r
 listPubmlst_orgs()[1:50]
@@ -113,32 +121,37 @@ Let see an example with toy data attached on this package:
 ``` r
 #First we list the atteched tar.gz file
 tgz <- system.file('extdata', 'example.tar.gz', package = 'MLSTar')
-genomes <- untar(tarfile = tgz, exdir = getwd(), list = T)
+genomes <- untar(tarfile = tgz, list = T)
 #Decompress them
-untar(tarfile = tgz,exdir = getwd())
+untar(tarfile = tgz,exdir = tempdir())
+genomes <- list.files(path = tempdir(), 
+                      pattern = paste0(genomes, collapse = '|'), 
+                      full.names = TRUE)
 genomes
 ```
 
-    ##  [1] "1049762.3.fasta" "1049765.3.fasta" "1049766.3.fasta"
-    ##  [4] "1049773.3.fasta" "1049780.3.fasta" "1049781.3.fasta"
-    ##  [7] "1218567.3.fasta" "174.14.fasta"    "174.15.fasta"   
-    ## [10] "174.17.fasta"
+    ##  [1] "/tmp/RtmpksRhvS/1049762.3.fasta" "/tmp/RtmpksRhvS/1049765.3.fasta"
+    ##  [3] "/tmp/RtmpksRhvS/1049766.3.fasta" "/tmp/RtmpksRhvS/1049773.3.fasta"
+    ##  [5] "/tmp/RtmpksRhvS/1049780.3.fasta" "/tmp/RtmpksRhvS/1049781.3.fasta"
+    ##  [7] "/tmp/RtmpksRhvS/1218567.3.fasta" "/tmp/RtmpksRhvS/174.14.fasta"   
+    ##  [9] "/tmp/RtmpksRhvS/174.15.fasta"    "/tmp/RtmpksRhvS/174.17.fasta"
 
-In this example we have 10 pathogenic *Leptospira borgpetersenii* genomes( **\*** ), in fasta format. 
-
-( **\*** ): Because of portability, just the corresponding alleles of each genomes are written in the fasta files for the scheme 1, and not the whole genomes. The purpose is to show the functions and not to provide a real case example.)
+In this example we have 10 pathogenic *Leptospira borgpetersenii* genomes(\*\* \* **), in fasta format. (** \* \*\*: Because of portability, just the corresponding alleles of each genomes are written in the fasta files for the scheme 1, and not the whole genomes. The purpose is to show the functions and not to provide a real case example.)
 
 Lets determine the MLST for the scheme 1.
 
 ``` r
-x <- doMLST(infiles = genomes, # The fasta files
-            org = lst[47], # The organism, in this case is "leptospira"
-            scheme = 1, # Scheme id number
-            write = "none") # Don't write fasta files for alleles found  
+x <- doMLST(
+  infiles = genomes, # The fasta files
+  org = lst[47], # The organism, in this case is "leptospira"
+  scheme = 1, # Scheme id number
+  write = "none", # Don't write fasta files for alleles found
+  ddir = paste0(tempdir(),'pubmlst_lep_sch1', collapse = '/') # Write downloaded sequences and profiles here.
+  )   
 ```
 
-    ## Downloading leptospira scheme 1 MLST sequences at /home/iferres/Documents/pubmlst_leptospira_1// .
-    ## Downloading leptospira scheme 1 MLST profile at /home/iferres/Documents/pubmlst_leptospira_1// .
+    ## Downloading leptospira scheme 1 MLST sequences at /tmp/RtmpksRhvSpubmlst_lep_sch1// .
+    ## Downloading leptospira scheme 1 MLST profile at /tmp/RtmpksRhvSpubmlst_lep_sch1// .
     ## Making BLAST databases... DONE!
     ## Running BLASTN... DONE!
     ## Checking if new alleles are equal... DONE!
@@ -226,14 +239,14 @@ The last column refers to the Sequence Type (ST). If possible, the function iden
 
 ### Minimum Spanning Tree
 
-The `mlst` class defined in this package include a `plot` method which uses [APE](http://ape-package.ird.fr/) for compute a minimum spanning tree (mst), and [igraph](http://igraph.org/) to build and object of class `igraph` and to plot it. Yellow nodes corresponds to the pubmlst reported `ST`s, blue nodes are the ones detected, and white ones are those for which no `ST` was possible to assign.
+The `mlst` class defined in this package include a `plot` method which uses [APE](http://ape-package.ird.fr/) for compute a minimum spanning tree (mst), and [igraph](http://igraph.org/) to build and object of class `igraph` and to plot it. In this case red nodes corresponds to the pubmlst reported `ST`s, blue nodes are the ones detected, and white ones are those for which no `ST` was possible to assign.
 
 ``` r
 set.seed(4)
 plot(x)
 ```
 
-![](vignettes/unnamed-chunk-8-1.png)
+![](vignettes/readme_files/figure-markdown_github/unnamed-chunk-8-1.png)
 
 The function `plot` returns invisibly an object of class `igraph` which can be further analized using that package.
 
@@ -243,9 +256,9 @@ g <- plot(x, plot = FALSE)
 g
 ```
 
-    ## IGRAPH dae158c UN-- 269 268 -- 
-    ## + attr: name (v/c), color (v/n)
-    ## + edges from dae158c (vertex names):
+    ## IGRAPH 266becf UN-- 269 268 -- 
+    ## + attr: name (v/c), color (v/c)
+    ## + edges from 266becf (vertex names):
     ##  [1] 1049762.3--1049765.3 1049762.3--1049781.3 1049762.3--1        
     ##  [4] 1049762.3--94        1049762.3--142       1049762.3--149      
     ##  [7] 1049762.3--158       1049762.3--163       1049762.3--167      
@@ -262,6 +275,24 @@ Beware with plotting the whole profile: a extensive MLST profile with, for insta
 plot(x, what = 'result')
 ```
 
-![](vignettes/unnamed-chunk-10-1.png)
+![](vignettes/readme_files/figure-markdown_github/unnamed-chunk-10-1.png)
 
-New methods will be added in the future. Any suggestions are welcomed.
+### Binary Tree
+
+The *mst* is the default plot method, but a binary tree can also be plotted, and in this case an object of class `phylo` (see APE package) is returned invisibly:
+
+``` r
+op <- par(no.readonly = TRUE)
+par(mfrow=c(1, 2))
+
+plot(x, type = 'phylo')
+plot(x, type = 'phylo', 
+     plot.phylo.args = list(type = 'fan'), 
+     tiplabels.args = list(offset = 0.1))
+     
+par(op)
+```
+
+![](vignettes/readme_files/figure-markdown_github/unnamed-chunk-11-1.png) ![](vignettes/readme_files/figure-markdown_github/unnamed-chunk-11-2.png)
+
+See `?plot.mlst` for more information about the plotting methods. New methods will be added in the future. Any suggestions are welcome.
