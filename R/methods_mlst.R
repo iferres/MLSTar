@@ -156,9 +156,7 @@ plot.mlst <- function(x,
 
 
   ### Start device functions ###
-  op <- par(no.readonly = T)
   on.exit(dev.flush())
-  on.exit(par(op), add = TRUE)
   dev.hold()
 
   apar <- list(mar=c(0,0,0,0)+.1)
