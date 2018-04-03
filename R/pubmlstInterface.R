@@ -64,7 +64,7 @@ listPubmlst_schemes <- function(org='leptospira'){
   for (i in 1:length(gns)){
     attr(gns[[i]],'Desc') <- e$description[i]
   }
-  gns
+  gns[order(names(gns))]
 }
 
 #' @name downloadPubmlst_seq
