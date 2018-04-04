@@ -238,10 +238,21 @@ doMLST <- function(infiles,
                       dir = paste0(getwd(),'/'),
                       prefix = fdir)
 
+  #There are some cases where a ST doesn't have all the alleles, particularly in cgMLST.
+  if(length(which(prof=='N'))>0){
+    prof[which(prof=='N', arr.ind = TRUE)] <- 'NA'
+  }
+
+
+  #Convert everything to character to allow comparisons:
+  resu[] <- lapply(resu, as.character)
+  prof[] <- lapply(prof, as.character)
+  sprof <- prof[, colnames(resu)]
+
   #Detect ST
   apply(resu,1,function(x){
-    prof$ST[which(apply(prof[,colnames(resu)],1,function(y){
-      all(x==y)
+    prof$ST[which(apply(sprof,1,function(y){
+      identical(x, y)
     }))]
   }) -> ig
   ig[!sapply(ig,length)] <- NA
