@@ -269,7 +269,7 @@ g
     ## [22] 1049773.3--154       1049780.3--174.15    1049780.3--155      
     ## + ... omitted several edges
 
-Beware with plotting the whole profile: a extensive MLST profile with, for instance, a model organism could consume a lot of resources and take a log time. The distance and *mst* computation scale exponentially with the number of elements. In this cases you can choose to plot just your isolates:
+Beware with plotting the whole profile: a extensive MLST profile with, for instance, a model organism could consume a lot of resources and take a long time. The distance and *mst* computation scale exponentially with the number of elements. In this cases you can choose to plot just your isolates:
 
 ``` r
 plot(x, what = 'result')
