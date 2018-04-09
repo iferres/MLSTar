@@ -172,6 +172,15 @@ doMLST <- function(infiles,
                                              dir = ddir)
     prof <- read.csv(schemeProfile,sep = '\t',header = T)
 
+    #Patch to avoid some strange publst profiles issues
+    if (!'clonal_complex'%in%colnames(prof)){
+      ap <- apply(prof, 2, function(y){all(is.na(y))})
+      if(any(ap)){
+        prof[, which(ap)] <- rownames(prof)
+        names(prof) <- names(prof)[c(2:dim(prof)[2], 1)]
+      }
+    }
+
   }else{
     if(!file.exists(schemeProfile)){
       warning('schemeProfile file missing, downloading..',immediate. = T)
