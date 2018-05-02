@@ -268,11 +268,21 @@ doMLST <- function(infiles,
   sprof <- prof[, colnames(resu)]
 
   #Detect ST
-  apply(resu,1,function(x){
-    prof$ST[which(apply(sprof,1,function(y){
-      identical(x, y)
-    }))]
-  }) -> ig
+  ty <- c('ST', 'cgST')[c('ST', 'cgST')%in%colnames(prof)]
+  if (ty=='ST'){
+    ig <- apply(resu,1,function(x){
+      prof$ST[which(apply(sprof,1,function(y){
+        identical(x, y)
+      }))]
+    })
+  }else{
+    ig <- apply(resu,1,function(x){
+      prof$cgST[which(apply(sprof,1,function(y){
+        identical(x, y)
+      }))]
+    })
+  }
+
   ig[!sapply(ig,length)] <- NA
   if(length(ig)>0){
     resu$ST <- unlist(ig)
