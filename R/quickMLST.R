@@ -281,7 +281,10 @@ doMLST <- function(infiles,
         identical(x, y)
       }))]
     })
+    colnames(prof) <- sub('^cgST$', 'ST', colnames(prof))
   }
+
+
 
   ig[!sapply(ig,length)] <- NA
   if(length(ig)>0){
