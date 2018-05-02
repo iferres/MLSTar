@@ -218,7 +218,7 @@ doMLST <- function(infiles,
       unlist(dbs) -> dbs
       cat(' DONE!\n')
     }else{
-      dbs <- sub('fas$', '', schemeFastas)
+      dbs <- sub('[.]fas$', '', schemeFastas)
     }
   }else{
     #Make BLAST DATABASEs
