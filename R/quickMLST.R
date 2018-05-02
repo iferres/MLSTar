@@ -170,7 +170,7 @@ doMLST <- function(infiles,
     schemeProfile <- downloadPubmlst_profile(org = org,
                                              scheme = scheme,
                                              dir = ddir)
-    prof <- read.csv(schemeProfile,sep = '\t',header = T)
+    prof <- read.csv(schemeProfile,sep = '\t',header = T, colClasses = 'character')
 
     #Patch to avoid some strange publst profiles issues
     if (!'clonal_complex'%in%colnames(prof)){
@@ -190,9 +190,9 @@ doMLST <- function(infiles,
       schemeProfile <- downloadPubmlst_profile(org = org,
                                                scheme = scheme,
                                                dir = ddir)
-      prof <- read.csv(schemeProfile,sep = '\t',header = T)
+      prof <- read.csv(schemeProfile,sep = '\t',header = T, colClasses = 'character')
     }else{
-      prof <- read.csv(schemeProfile,sep = '\t',header = T)
+      prof <- read.csv(schemeProfile,sep = '\t',header = T, colClasses = 'character')
       fils <- sub('.fas$','',sapply(schemeFastas,function(x){rev(strsplit(x,'/')[[1]])[1]}))
       if (!all(fils%in%colnames(prof))){
         stop("The scheme fasta files doesn't correspond to the supplied profile file.
@@ -264,7 +264,7 @@ doMLST <- function(infiles,
 
   #Convert everything to character to allow comparisons:
   resu[] <- lapply(resu, as.character)
-  prof[] <- lapply(prof, as.character)
+  # prof[] <- lapply(prof, as.character)
   sprof <- prof[, colnames(resu)]
 
   #Detect ST
