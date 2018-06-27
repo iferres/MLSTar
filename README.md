@@ -16,6 +16,8 @@ devtools::install_github('iferres/MLSTar')
 
 `MLSTar` depends on [BLAST+](https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=Download) software, and must be installed in your `$PATH` prior to run this package.
 
+*Note: There seems to be incompatibility with MacOS X Mavericks 10.9.5. It was tested and works on MacOS>10.11.2 El Capitan.*
+
 Standard workflow
 -----------------
 
