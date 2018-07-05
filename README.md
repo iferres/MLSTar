@@ -3,6 +3,13 @@ MLSTar
 
 This R package allows you to easily determine the Multi Locus Sequence Type (MLST) of your genomes. It also works as an interface between [PubMLST](https://pubmlst.org/) through their [RESTful API](https://pubmlst.org/rest/), so you don't have to bother downloading and collecting files: the application does it automatically. Today the package works in Unix-based systems.
 
+Citation
+--------
+
+If you use `MLSTar` in your publications, please cite:
+
+Ferrés I, Iraola G. MLSTar: automatic multilocus sequence typing of bacterial genomes in R. PeerJ. 2018;6 [https://doi.org/10.7717/peerj.5098](https://doi.org/10.7717/peerj.5098).
+
 Installation
 ------------
 
