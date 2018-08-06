@@ -66,7 +66,7 @@ processResu <- function(resu,
             nsq <- sapply(paste0(';', n, ';'), function(z){ grep(z, names(sq), fixed = TRUE)})
             spl <- do.call(rbind, strsplit(names(sq)[nsq], ';'))
             spl[, 1] <- sub('u$', nu, spl[, 1])
-            names(sq)[nsq] <- paste0(spl, collapse = ';')
+            names(sq)[nsq] <- apply(spl, 1, paste0, collapse = ';')
             seqinr::write.fasta(sq,names = names(sq), file.out = out.newAllele, as.string = TRUE)
           }
           count <- count +1L
