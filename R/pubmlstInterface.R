@@ -144,8 +144,8 @@ downloadPubmlst_profile <- function(org='leptospira',
                                     dir='.'){
 
   paste0(normalizePath(dir),'/') -> dir
-  paste0('http://rest.pubmlst.org/db/pubmlst_',org,'_seqdef/schemes',scheme) -> d
-  jsonlite::fromJSON(rawToChar(httr::GET(d)$content))$profiles_csv -> d2
+  paste0('http://rest.pubmlst.org/db/pubmlst_',org,'_seqdef/schemes/',scheme) -> d
+  jsonlite::fromJSON(d)$profiles_csv -> d2
   if (is.null(d2)){
     stop('Could not download profile - Invalid input.')
   }
