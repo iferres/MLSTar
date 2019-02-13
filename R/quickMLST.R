@@ -3,7 +3,8 @@
 #' @description Takes a list of genome fasta files and perform blastn searches
 #' to identify the sequence type for each of the genes/loci available in a mlst
 #' scheme.
-#' @param infiles A vector of genome sequences in fasta format.
+#' @param infiles A vector of genome sequence file paths in fasta format. Could
+#' also be multifasta files of predicted Open Reading Frames.
 #' @param org A valid organism from pubmlst.org. Run \link{listPubmlst_orgs} to
 #' see available ones.
 #' @param scheme \code{integer}. The scheme id number for a given organism. Run
