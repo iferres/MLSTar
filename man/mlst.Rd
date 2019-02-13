@@ -5,8 +5,8 @@
 \title{MLST}
 \usage{
 mlst(genome, dbs, write = "new", prefix = "allele", dir = ".",
-  dnw = paste0(dir, "tmp/"), n_threads = 1L, outf = tempdir(), pid = 90,
-  scov = 0.9)
+  dnw = paste0(dir, "tmp/"), n_threads = 1L, outf = tempdir(),
+  pid = 90, scov = 0.9)
 }
 \arguments{
 \item{genome}{A FASTA file with the genome sequence.}

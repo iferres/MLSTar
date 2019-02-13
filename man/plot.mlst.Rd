@@ -7,7 +7,8 @@
 \method{plot}{mlst}(x, type = "mst", what = "both", pt.size = 3,
   label = FALSE, pf.col = "#E64B35FF", st.col = "#00A087FF",
   nst.col = "white", alpha = 0.5, plot.igraph.args = list(),
-  plot.phylo.args = list(), tiplabels.args = list(), plot = TRUE, ...)
+  plot.phylo.args = list(), tiplabels.args = list(), plot = TRUE,
+  ...)
 }
 \arguments{
 \item{x}{An object of class \code{mlst}.}

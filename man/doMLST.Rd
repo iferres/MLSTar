@@ -5,12 +5,13 @@
 \title{Perform MLST Analysis Over a List of Genomes}
 \usage{
 doMLST(infiles, org = "leptospira", scheme = 1L, schemeFastas = NULL,
-  schemeProfile = NULL, write = "new", ddir = paste0("pubmlst", "_", org,
-  "_", scheme), fdir = paste0("alleles", "_", org, "_", scheme),
+  schemeProfile = NULL, write = "new", ddir = paste0("pubmlst", "_",
+  org, "_", scheme), fdir = paste0("alleles", "_", org, "_", scheme),
   n_threads = 1L, pid = 90L, scov = 0.9)
 }
 \arguments{
-\item{infiles}{A vector of genome sequences in fasta format.}
+\item{infiles}{A vector of genome sequence file paths in fasta format. Could
+also be multifasta files of predicted Open Reading Frames.}
 
 \item{org}{A valid organism from pubmlst.org. Run \link{listPubmlst_orgs} to
 see available ones.}
@@ -41,22 +42,31 @@ sequences (see \code{write}). (Default:
 \item{n_threads}{\code{integer}. The number of cores to use. Each job consist
 on the process for one genome. Blastn searches will use 1 core per job.}
 
-\item{pid}{Percentage identity threshold to be consider as an allele. An
+\item{pid}{Percentage identity threshold to be consider as a novel allele. An
 \code{integer} <= 100. (Default: 90).}
 
-\item{scov}{Subject coverage threshold to be consider as an allele. A
+\item{scov}{Subject coverage threshold to be consider as a novel allele. A
 \code{numeric} between 0 and 1. Not recomended to set it below 0.7 .
 (Default 0.9)
 # @details}
 }
 \value{
-A \code{data.frame}. Rows are \code{infiles} and columns are genes
-from the selected MLST scheme. '<NA>' values means that no allele were
-found in the respective genome. 'u' (from 'unknown') means that the allele
-found was not reported in pubmlst.org database; a fasta file with the new
-allele is written in this case. A number indicates the allele id number of
-the reported alleles in pubmlst.org . The last column ($ST) indicates the ST
-determined by the sequence of alleles, if available.
+An object of class "mlst", which consists on a list of 2 dataframes.
+The first one is the alleles called for the \code{infiles} and the ST
+detected, whereas the second is the scheme profile. The "result" data.frame
+shows one genome per row and one gene from the selected scheme per column.
+The last column is the ST detected for each genome. "NA" values means that
+no allele were found in the respective genome. A 'u' (from 'unknown') plus
+an integer means that the allele found was not reported in pubmlst.org
+database; a fasta file with the new allele is written in this case if
+\code{"write"} is set to "new" or "all" (see above). New alleles are
+compared with each other so the names are properly chosen in case 2 or more
+of those novel alleles were the same (in that cases, the names would be the
+same). A number indicates the allele id number of the reported alleles in
+pubmlst.org . The second data.frame is the profile definition chosen, the
+logic is the same as the first one but in this case rows are the combination
+of alleles reported at pubmlst.org . A series of attributes are also given
+in the "mlst" object, mainly refering to the parameters used by the function.
 }
 \description{
 Takes a list of genome fasta files and perform blastn searches
