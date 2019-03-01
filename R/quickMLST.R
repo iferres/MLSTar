@@ -89,6 +89,8 @@ doMLST <- function(infiles,
 
   write <- match.arg(write, c('none', 'new', 'all'))
 
+  warning(fdir)
+
   if (write%in%c('new', 'all')){
     if(!dir.exists(fdir)){
       #dont normalize path because in following steps directories are created
