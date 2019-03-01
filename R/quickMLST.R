@@ -93,7 +93,7 @@ doMLST <- function(infiles,
     if(!dir.exists(fdir)){
       #dont normalize path because in following steps directories are created
       # recursively.
-      dir.create(fdir, showWarnings=TRUE, recursive=FALSE)
+      dir.create(path=fdir, showWarnings=TRUE, recursive=FALSE)
     }else{
       warning(paste0(fdir, ' already exists. Continuing anyway...'))
     }
