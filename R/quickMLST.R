@@ -95,7 +95,7 @@ doMLST <- function(infiles,
       # recursively.
       dir.create(fdir)
     }else{
-      stop(paste0(fdir, ' already exists.'))
+      warning(paste0(fdir, ' already exists. Continuing anyway...'))
     }
   }
 
