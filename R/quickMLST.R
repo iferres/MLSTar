@@ -80,7 +80,7 @@ doMLST <- function(infiles,
 
   if (is.null(schemeFastas) | is.null(schemeProfile)){
     if(!dir.exists(ddir)){
-      dir.create(ddir)
+      dir.create(ddir, recursive = FALSE)
       ddir <- paste0(normalizePath(ddir),'/')
     }else{
       stop(paste0(ddir, ' already exists.'))
@@ -93,7 +93,7 @@ doMLST <- function(infiles,
     if(!dir.exists(fdir)){
       #dont normalize path because in following steps directories are created
       # recursively.
-      dir.create(fdir)
+      dir.create(fdir, recursive = FALSE)
     }else{
       stop(paste0(fdir, ' already exists.'))
     }
