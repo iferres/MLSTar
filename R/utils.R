@@ -55,7 +55,8 @@ processResu <- function(resu,
       if (length(gp)>1){
         sq <- seqinr::read.fasta(out.tmp, seqtype = 'DNA', as.string = TRUE)
         ul <- unlist(sq)
-        gr <- split(names(ul), ul)
+        gf <- getf(ul)
+        gr <- split(names(ul), gf)
         for (i in seq_along(gr)){
           nu <- paste0('u', count)
           n <- sapply(strsplit(gr[[i]],';'), '[', 2)
@@ -163,5 +164,32 @@ mlst <- function(genome,
   names(res) <- nams
   res
 }
+
+
+#' @name getf
+#' @title Get a vector of integers which represents a factor to split the
+#' sequences in equal alleles taking into account the reverse complement.
+#' @param sq A list with SeqFastadna objects.
+#' @return A vector of integers
+#' @importFrom seqinr comp
+getf <- function(sq){
+
+  ul <- unlist(sq)
+  rvcp <- lapply(ul, function(x) {
+    s1 <- x
+    s2 <- paste0(rev(comp(strsplit(x, '')[[1]])), collapse = '')
+    c(s1, s2)
+  })
+
+  sp <- sapply(rvcp, function(x){
+    paste0(which(unlist(sapply(rvcp, function(y){
+      x%in%y
+    }, simplify = T))), collapse = '')
+  }, simplify = T)
+
+  as.numeric(factor(sp))
+}
+
+
 
 
