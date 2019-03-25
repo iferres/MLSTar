@@ -88,7 +88,7 @@ listPubmlst_orgs()[1:50]
     ## [47] "leptospira"              "mcanis"                 
     ## [49] "mcaseolyticus"           "mplutonius"
 
-Lets say we are interested in Leptospira genus, which is in the place 47 in the list above. So:
+Lets say we are interested in Leptospira genus, which is in the place 47 (*place may change over time*) in the list above. So:
 
 ``` r
 lst <- listPubmlst_orgs() 
