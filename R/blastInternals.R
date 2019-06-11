@@ -65,7 +65,7 @@ blastn <- function(genome='',
   cmd<-paste0("blastn -word_size 50 -ungapped -dust no -query ",genome,
               " -db ",db,
               " -evalue ",eval,
-              " -outfmt '6 qseqid sseqid pident gaps length qstart qend evalue qseq'",
+              " -outfmt '6 qseqid sseqid pident gaps length slen evalue qseq'",
               " -out ",outfile,
               " -num_threads ",n_threads)
   system(cmd)
@@ -85,7 +85,7 @@ blastn <- function(genome='',
 #' @importFrom utils read.table
 readBlastResult <- function(blout=''){
 
-  cols<-c('qid','sid','pid','gaps','lgth','qstart','qend','evalue','qseq')
+  cols<-c('qid','sid','pid','gaps','lgth','slen','evalue','qseq')
   try(read.csv(blout,
                header = F,
                col.names = cols,
@@ -151,8 +151,7 @@ processBlastResult <- function(blastRes,
   dir.create(dtmp, recursive = TRUE, showWarnings = FALSE)
 
   if (class(blastRes)!='try-error'){
-    blastRes$scov <- (blastRes$lgth - blastRes$gaps) /
-      (blastRes$qend - blastRes$qstart + 1)
+    blastRes$scov <- (blastRes$lgth - blastRes$gaps) / blastRes$slen
 
     if(any(blastRes$pid==100 &
            blastRes$scov==1)){
