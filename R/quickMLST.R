@@ -30,7 +30,7 @@
 #' \code{integer} <= 100. (Default: 90).
 #' @param scov Subject coverage threshold to be consider as a novel allele. A
 #' \code{numeric} between 0 and 1. Not recomended to set it below 0.7 .
-#' (Default 0.9)
+#' (Default 1.0)
 #'# @details
 #' @return An object of class "mlst", which consists on a list of 2 dataframes.
 #' The first one is the alleles called for the \code{infiles} and the ST
@@ -68,7 +68,7 @@ doMLST <- function(infiles,
                    fdir = paste0('alleles','_',org,'_',scheme),
                    n_threads=1L,
                    pid=90L,
-                   scov=0.9){
+                   scov=1.0){
 
   if (.Platform$OS.type!='unix'){
     stop('Sorry, this package works only on unix-like platforms.')
