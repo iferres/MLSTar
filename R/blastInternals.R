@@ -65,7 +65,7 @@ blastn <- function(genome='',
   cmd<-paste0("blastn -word_size 50 -ungapped -dust no -query ",genome,
               " -db ",db,
               " -evalue ",eval,
-              " -outfmt '6 qseqid sseqid pident gaps length slen evalue qseq'",
+              " -outfmt '6 qseqid sseqid pident gaps length slen evalue qseq sstart send'",
               " -out ",outfile,
               " -num_threads ",n_threads)
   system(cmd)
@@ -85,7 +85,7 @@ blastn <- function(genome='',
 #' @importFrom utils read.table
 readBlastResult <- function(blout=''){
 
-  cols<-c('qid','sid','pid','gaps','lgth','slen','evalue','qseq')
+  cols<-c('qid','sid','pid','gaps','lgth','slen','evalue','qseq','sstart','send')
   try(read.csv(blout,
                header = F,
                col.names = cols,
@@ -124,7 +124,7 @@ readBlastResult <- function(blout=''){
 #' @return The allele number id if an exact match with a reported mlst gene is
 #' found, a name arbitrarily given if a new allele is found, or \code{NA} if no
 #' alleles are found.
-#' @importFrom seqinr write.fasta
+#' @importFrom seqinr write.fasta comp s2c c2s
 #' @author Ignacio Ferres
 processBlastResult <- function(blastRes,
                                pid=90,
@@ -183,15 +183,21 @@ processBlastResult <- function(blastRes,
 
     }else if(any(blastRes$pid>=pid &
                  blastRes$scov>=scov)){
-
-      blastRes$Val <- blastRes$pid/blastRes$scov
-      wh <- which.min(abs(blastRes$Val - 100))
+      # filter those that match thresholds
+      filteredBlastRes <- blastRes[which(blastRes$pid>=pid & blastRes$scov>=scov),]
+      filteredBlastRes$Val <- filteredBlastRes$pid/filteredBlastRes$scov
+      wh <- which.min(abs(filteredBlastRes$Val - 100))
 
       allele <- 'u'
       names(allele) <- gene
 
-      sq <- blastRes$qseq[wh]
-      qid <- blastRes$qid[wh]
+      sq <- filteredBlastRes$qseq[wh]
+      # reverse complement if hit is in the reverse orientation
+
+      if (filteredBlastRes$sstart[wh] > filteredBlastRes$send[wh]){
+        sq <- c2s(rev(comp(s2c(sq))))
+      }
+      qid <- filteredBlastRes$qid[wh]
       hit <- paste0(gene, '_u')
       nsq <- paste0(hit, ';', gid, ';', qid)
 
