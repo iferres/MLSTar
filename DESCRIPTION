@@ -1,7 +1,7 @@
 Package: MLSTar
 Type: Package
 Title: Quick Multi Locus Sequence Typing Analisys
-Version: 0.1.4
+Version: 0.1.5
 Date: 2017-03-28
 Authors@R: c(
     person("Ignacio", "Ferres", email = "iferres@pasteur.edu.uy", role=c("aut","cre")),
@@ -23,4 +23,4 @@ Depends:
 Description: Access pubmlst.org data from within R and perform MLST of your genomes (in fasta format) for a given scheme of your organism of interest.
 License: MIT + file LICENSE
 LazyData: TRUE
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.0
