@@ -44,6 +44,10 @@ print.mlst <- function(x, ...){
 #' @param nst.col The color of result nodes/tips with no ST assigned. Default:
 #' \code{"white"}. Ignored if \code{what="profile"}.
 #' @param alpha Color transparency, between [0,1]. See \link[scales]{alpha}.
+#' @param pairwise.deletion A \code{logical} indicating whether to delete the
+#' comumns with missing data on a pairwise basis. If \code{FALSE} (default) and
+#' \code{NA}s are found, then each \code{NA} is condidered as a different
+#' allele when computing distance.
 #' @param plot.igraph.args A \code{list} of arguments to be passed to
 #' \link[igraph]{plot.igraph}. Used only if \code{type="mst"}. Defaults try
 #' to keep aesthetics similar to \code{phylo}'s. Default: \code{list(vertex.label = if (label) NULL else NA,
@@ -93,6 +97,7 @@ plot.mlst <- function(x,
                       st.col = "#00A087FF",
                       nst.col = "white",
                       alpha = 0.5,
+                      pairwise.deletion = FALSE,
                       plot.igraph.args = list(),
                       plot.phylo.args = list(),
                       tiplabels.args = list(),
@@ -152,7 +157,13 @@ plot.mlst <- function(x,
   # d <- dist.gene(m)/(dim(m)[2]-1L)
   # following is better cause it return integer and not numeric, and in
   # practical cases it gives the same result on further steps:
-  d <- dist.gene(m)
+  nam <- is.na(m)
+  if (any(nam) & !pairwise.deletion) {
+    warning("NAs encountered.\n As pairwise.deletion = FALSE, each NA will be considered as a different allele.", immediate. = TRUE, noBreaks. = TRUE)
+    nna <- length(which(nam))
+    m[which(nam, arr.ind = TRUE)] <- paste(m[which(nam, arr.ind = TRUE)], seq_len(nna), sep = "")
+  }
+  d <- dist.gene(m, pairwise.deletion = pairwise.deletion)
 
 
   ### Start device functions ###

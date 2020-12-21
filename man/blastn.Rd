@@ -4,8 +4,7 @@
 \alias{blastn}
 \title{Seach with Blastn.}
 \usage{
-blastn(genome = "", db = "", outdir = ".", n_threads = 1L,
-  eval = 1e-06)
+blastn(genome = "", db = "", outdir = ".", n_threads = 1L, eval = 1e-06)
 }
 \arguments{
 \item{genome}{The query. A nucleotide fasta file.}

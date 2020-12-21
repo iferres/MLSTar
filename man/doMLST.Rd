@@ -4,10 +4,19 @@
 \alias{doMLST}
 \title{Perform MLST Analysis Over a List of Genomes}
 \usage{
-doMLST(infiles, org = "leptospira", scheme = 1L, schemeFastas = NULL,
-  schemeProfile = NULL, write = "new", ddir = paste0("pubmlst", "_",
-  org, "_", scheme), fdir = paste0("alleles", "_", org, "_", scheme),
-  n_threads = 1L, pid = 90L, scov = 0.9)
+doMLST(
+  infiles,
+  org = "leptospira",
+  scheme = 1L,
+  schemeFastas = NULL,
+  schemeProfile = NULL,
+  write = "new",
+  ddir = paste0("pubmlst", "_", org, "_", scheme),
+  fdir = paste0("alleles", "_", org, "_", scheme),
+  n_threads = 1L,
+  pid = 90L,
+  scov = 1
+)
 }
 \arguments{
 \item{infiles}{A vector of genome sequence file paths in fasta format. Could
@@ -47,7 +56,7 @@ on the process for one genome. Blastn searches will use 1 core per job.}
 
 \item{scov}{Subject coverage threshold to be consider as a novel allele. A
 \code{numeric} between 0 and 1. Not recomended to set it below 0.7 .
-(Default 0.9)
+(Default 1.0)
 # @details}
 }
 \value{

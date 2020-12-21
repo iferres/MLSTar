@@ -4,11 +4,23 @@
 \alias{plot.mlst}
 \title{Plot A mlst Object}
 \usage{
-\method{plot}{mlst}(x, type = "mst", what = "both", pt.size = 3,
-  label = FALSE, pf.col = "#E64B35FF", st.col = "#00A087FF",
-  nst.col = "white", alpha = 0.5, plot.igraph.args = list(),
-  plot.phylo.args = list(), tiplabels.args = list(), plot = TRUE,
-  ...)
+\method{plot}{mlst}(
+  x,
+  type = "mst",
+  what = "both",
+  pt.size = 3,
+  label = FALSE,
+  pf.col = "#E64B35FF",
+  st.col = "#00A087FF",
+  nst.col = "white",
+  alpha = 0.5,
+  pairwise.deletion = FALSE,
+  plot.igraph.args = list(),
+  plot.phylo.args = list(),
+  tiplabels.args = list(),
+  plot = TRUE,
+  ...
+)
 }
 \arguments{
 \item{x}{An object of class \code{mlst}.}
@@ -33,6 +45,11 @@ Ignored if \code{what="profile"}.}
 \code{"white"}. Ignored if \code{what="profile"}.}
 
 \item{alpha}{Color transparency, between [0,1]. See \link[scales]{alpha}.}
+
+\item{pairwise.deletion}{A \code{logical} indicating whether to delete the
+comumns with missing data on a pairwise basis. If \code{FALSE} (default) and
+\code{NA}s are found, then each \code{NA} is condidered as a different
+allele when computing distance.}
 
 \item{plot.igraph.args}{A \code{list} of arguments to be passed to
 \link[igraph]{plot.igraph}. Used only if \code{type="mst"}. Defaults try

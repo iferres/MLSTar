@@ -4,8 +4,15 @@
 \alias{processBlastResult}
 \title{Process Blastn Result}
 \usage{
-processBlastResult(blastRes, pid = 90, scov = 0.9, write = "new",
-  prefix = "alleles", dir = ".", dnw = paste0(dir, "tmp/"))
+processBlastResult(
+  blastRes,
+  pid = 90,
+  scov = 0.9,
+  write = "new",
+  prefix = "alleles",
+  dir = ".",
+  dnw = paste0(dir, "tmp/")
+)
 }
 \arguments{
 \item{blastRes}{A \code{data.frame} as returned by \link{readBlastResult}.}

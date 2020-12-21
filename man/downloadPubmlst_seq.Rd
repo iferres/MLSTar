@@ -4,8 +4,7 @@
 \alias{downloadPubmlst_seq}
 \title{Download Genes for a Given MLST Scheme}
 \usage{
-downloadPubmlst_seq(org = "leptospira", scheme = "", dir = ".",
-  n_threads = 1L)
+downloadPubmlst_seq(org = "leptospira", scheme = "", dir = ".", n_threads = 1L)
 }
 \arguments{
 \item{org}{\code{character}. A genus (lowercase).}
